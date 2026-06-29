@@ -29,6 +29,13 @@ async function connectDB() {
   console.log('✅ Connected to MongoDB: ms_gaming');
 }
 
+function getObjectId(value) {
+  if (!value) return null;
+  if (value instanceof ObjectId) return value;
+  if (typeof value === 'string' && ObjectId.isValid(value)) return new ObjectId(value);
+  return null;
+}
+
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
@@ -116,7 +123,9 @@ app.get('/api/posts', async (req, res) => {
 // GET /api/posts/:id  — single post + increment views
 app.get('/api/posts/:id', async (req, res) => {
   try {
-    const _id = new ObjectId(req.params.id);
+    const _id = getObjectId(req.params.id);
+    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
+
     const post = await db.collection('posts').findOne({ _id });
     if (!post || post.isDeleted) return res.status(404).json({ error: 'Post not found' });
 
@@ -171,7 +180,10 @@ app.post('/api/posts', requireAuth, async (req, res) => {
 // PUT /api/posts/:id  — update (author or mod+)
 app.put('/api/posts/:id', requireAuth, async (req, res) => {
   try {
-    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    const _id = getObjectId(req.params.id);
+    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
+
+    const post = await db.collection('posts').findOne({ _id });
     if (!post) return res.status(404).json({ error: 'Post not found' });
 
     const canEdit = post.authorId === req.userId || ['moderator', 'admin', 'superadmin'].includes(req.userRole);
@@ -179,7 +191,7 @@ app.put('/api/posts/:id', requireAuth, async (req, res) => {
 
     const { title, content, category, tags } = req.body;
     await db.collection('posts').updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id },
       { $set: { title, content, category, tags, updatedAt: new Date() } }
     );
     res.json({ success: true });
@@ -192,14 +204,17 @@ app.put('/api/posts/:id', requireAuth, async (req, res) => {
 // DELETE /api/posts/:id  — soft delete (author or mod+)
 app.delete('/api/posts/:id', requireAuth, async (req, res) => {
   try {
-    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    const _id = getObjectId(req.params.id);
+    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
+
+    const post = await db.collection('posts').findOne({ _id });
     if (!post) return res.status(404).json({ error: 'Post not found' });
 
     const canDelete = post.authorId === req.userId || ['moderator', 'admin', 'superadmin'].includes(req.userRole);
     if (!canDelete) return res.status(403).json({ error: 'Not authorised' });
 
     await db.collection('posts').updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id },
       { $set: { isDeleted: true } }
     );
     res.json({ success: true });
@@ -212,12 +227,15 @@ app.delete('/api/posts/:id', requireAuth, async (req, res) => {
 // POST /api/posts/:id/like  — toggle like
 app.post('/api/posts/:id/like', requireAuth, async (req, res) => {
   try {
-    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    const _id = getObjectId(req.params.id);
+    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
+
+    const post = await db.collection('posts').findOne({ _id });
     if (!post) return res.status(404).json({ error: 'Post not found' });
 
     const liked = post.likes?.includes(req.userId);
     const op = liked ? { $pull: { likes: req.userId } } : { $addToSet: { likes: req.userId } };
-    await db.collection('posts').updateOne({ _id: new ObjectId(req.params.id) }, op);
+    await db.collection('posts').updateOne({ _id }, op);
 
     const newCount = liked ? (post.likes.length - 1) : (post.likes.length + 1);
     res.json({ liked: !liked, likeCount: newCount });
@@ -230,11 +248,14 @@ app.post('/api/posts/:id/like', requireAuth, async (req, res) => {
 // POST /api/posts/:id/pin  — toggle pin (mod+)
 app.post('/api/posts/:id/pin', requireAuth, requireMod, async (req, res) => {
   try {
-    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    const _id = getObjectId(req.params.id);
+    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
+
+    const post = await db.collection('posts').findOne({ _id });
     if (!post) return res.status(404).json({ error: 'Post not found' });
 
     await db.collection('posts').updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id },
       { $set: { isPinned: !post.isPinned } }
     );
     res.json({ isPinned: !post.isPinned });
@@ -262,6 +283,9 @@ app.get('/api/posts/:id/comments', async (req, res) => {
 // POST /api/posts/:id/comments
 app.post('/api/posts/:id/comments', requireAuth, async (req, res) => {
   try {
+    const _id = getObjectId(req.params.id);
+    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
+
     const { content, parentId = null } = req.body;
     if (!content?.trim()) return res.status(400).json({ error: 'Content required' });
 
@@ -279,7 +303,7 @@ app.post('/api/posts/:id/comments', requireAuth, async (req, res) => {
 
     const { insertedId } = await db.collection('comments').insertOne(comment);
     await db.collection('posts').updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id },
       { $inc: { commentCount: 1 } }
     );
 
@@ -293,14 +317,17 @@ app.post('/api/posts/:id/comments', requireAuth, async (req, res) => {
 // DELETE /api/comments/:id  — soft delete (author or mod+)
 app.delete('/api/comments/:id', requireAuth, async (req, res) => {
   try {
-    const comment = await db.collection('comments').findOne({ _id: new ObjectId(req.params.id) });
+    const commentId = getObjectId(req.params.id);
+    if (!commentId) return res.status(400).json({ error: 'Invalid comment id' });
+
+    const comment = await db.collection('comments').findOne({ _id: commentId });
     if (!comment) return res.status(404).json({ error: 'Comment not found' });
 
     const canDelete = comment.authorId === req.userId || ['moderator', 'admin', 'superadmin'].includes(req.userRole);
     if (!canDelete) return res.status(403).json({ error: 'Not authorised' });
 
     await db.collection('comments').updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id: commentId },
       { $set: { isDeleted: true } }
     );
     res.json({ success: true });

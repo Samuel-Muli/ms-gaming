@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Youtube, Twitch, Twitter, MessageCircle, Wifi } from 'lucide-react'
 
 const NEWS_ITEMS = [
-  '🔥 PUBG Season 2025 — New Deston map updates & ranked season changes now LIVE',
+  '🔥 PUBG Season 2025 — New Rondo map updates & ranked season changes now LIVE',
   '⚡ Community Alert — 【M。S】 gaming tips series: Drop Zone Mastery is up now',
   '🎮 Gaming Phone Showdown — ROG Phone 9 vs RedMagic 10 Pro: full comparison inside',
   '🏆 PUBG Global Championship 2025 — Group stage results & bracket breakdown',

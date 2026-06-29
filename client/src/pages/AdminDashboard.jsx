@@ -264,12 +264,11 @@ function Dashboard() {
               fontSize: '14px',
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
-              color:       tab === id ? '#F0842C' : '#8888AA',
-              borderBottom: tab === id ? '2px solid #F0842C' : '2px solid transparent',
-              background:   'none',
-              border:       'none',
-              borderBottom: tab === id ? '2px solid #F0842C' : '2px solid transparent',
-              cursor:       'pointer',
+              color: tab === id ? '#F0842C' : '#8888AA',
+              borderBottom: '2px solid ' + (tab === id ? '#F0842C' : 'transparent'),
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
             }}
           >
             <Icon size={14} /> {label}
