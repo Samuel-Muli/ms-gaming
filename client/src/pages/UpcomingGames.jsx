@@ -69,7 +69,7 @@ export default function UpcomingGames() {
           <div className="w-10 h-10 flex items-center justify-center" style={{ background: 'rgba(58,232,88,0.1)', border: '1px solid rgba(58,232,88,0.2)' }}>
             <Calendar size={20} className="text-g-green" />
           </div>
-          <span className="section-label" style={{ color: '#3AE858' }}>Events</span>
+          <span className="section-label" style={{ color: 'var(--green)' }}>Events</span>
         </div>
         <h1 className="font-barlow font-800 text-3xl md:text-4xl text-g-text uppercase tracking-wide mb-2">Upcoming Games & Events</h1>
         <p className="text-g-muted max-w-xl" style={{ fontFamily: 'Rajdhani', fontSize: '16px' }}>
@@ -85,7 +85,7 @@ export default function UpcomingGames() {
               className="w-2.5 h-2.5 rounded-full bg-g-red"
               style={{ animation: 'blink 1s step-end infinite' }}
             />
-            <div className="section-label" style={{ color: '#E83A3A' }}>Live Now</div>
+            <div className="section-label" style={{ color: 'var(--red)' }}>Live Now</div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {ongoing.map(ev => <EventCard key={ev.slug} event={ev} />)}

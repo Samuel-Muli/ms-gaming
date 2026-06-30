@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useAuth } from '@clerk/clerk-react'
+import { useAuth, SignInButton } from '@clerk/clerk-react'
 import { Clock, Tag, MessageSquare, Send, Trash2, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { articles, getArticleBySlug } from '../data/articles'
@@ -163,7 +163,7 @@ export default function Article({ category }) {
         </div>
 
         {/* Divider */}
-        <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, #F0842C, rgba(240,132,44,0.1), transparent)' }} />
+        <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, var(--orange), rgba(240,132,44,0.1), transparent)' }} />
       </header>
 
       {/* Two-column layout (article + mini sidebar) */}
@@ -185,7 +185,7 @@ export default function Article({ category }) {
               <div className="flex items-center gap-3">
                 <div
                   className="w-10 h-10 flex items-center justify-center font-orbitron font-700 text-sm"
-                  style={{ background: 'linear-gradient(135deg, #1c1c28, #2a2a3a)', border: '1px solid rgba(240,132,44,0.3)', color: '#C8A044' }}
+                  style={{ background: 'linear-gradient(135deg, var(--s2), var(--border))', border: '1px solid rgba(240,132,44,0.3)', color: 'var(--gold)' }}
                 >
                   M
                 </div>
@@ -221,7 +221,7 @@ export default function Article({ category }) {
 
       {/* ── Comments ── */}
       <section className="mt-12">
-        <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, #F0842C, rgba(240,132,44,0.1), transparent)' }} />
+        <div className="h-px mb-8" style={{ background: 'linear-gradient(90deg, var(--orange), rgba(240,132,44,0.1), transparent)' }} />
         <h2 className="font-barlow font-700 text-xl uppercase tracking-wider text-g-text mb-6 flex items-center gap-2">
           <MessageSquare size={18} className="text-g-orange" />
           Comments ({comments.length})
@@ -253,7 +253,9 @@ export default function Article({ category }) {
         ) : (
           <div className="gaming-card p-5 mb-6 text-center">
             <p className="text-g-muted mb-3" style={{ fontFamily: 'Rajdhani' }}>Sign in to leave a comment.</p>
-            <Link to="/sign-in" className="btn btn-ghost text-sm">Sign In to Comment</Link>
+            <SignInButton mode="modal">
+              <button className="btn btn-ghost text-sm">Sign In to Comment</button>
+            </SignInButton>
           </div>
         )}
 
@@ -268,7 +270,7 @@ export default function Article({ category }) {
             <div key={c._id} className="gaming-card p-4 flex gap-3">
               <div
                 className="w-9 h-9 shrink-0 flex items-center justify-center font-orbitron text-xs font-700"
-                style={{ background: 'linear-gradient(135deg, #1c1c28, #2a2a3a)', border: '1px solid #2a2a3a', color: '#C8A044' }}
+                style={{ background: 'linear-gradient(135deg, var(--s2), var(--border))', border: '1px solid var(--border)', color: 'var(--gold)' }}
               >
                 {c.authorName?.charAt(0)?.toUpperCase()}
               </div>

@@ -86,7 +86,7 @@ function RolePicker({ user, currentUserRole, onChanged }) {
         {!isLocked && <ChevronDown size={10} />}
       </button>
       {msg && (
-        <span className="ml-2 text-xs" style={{ color: msg.startsWith('✓') ? '#3AE858' : '#E83A3A', fontFamily: 'JetBrains Mono' }}>
+        <span className="ml-2 text-xs" style={{ color: msg.startsWith('✓') ? 'var(--green)' : 'var(--red)', fontFamily: 'JetBrains Mono' }}>
           {msg}
         </span>
       )}
@@ -94,14 +94,14 @@ function RolePicker({ user, currentUserRole, onChanged }) {
       {open && (
         <div
           className="absolute left-0 top-full mt-1 z-50 min-w-max"
-          style={{ background: '#12121a', border: '1px solid #2a2a3a', borderTop: '2px solid #F0842C', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderTop: '2px solid var(--orange)', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
         >
           {assignable.map(r => (
             <button
               key={r}
               onClick={() => setRole(r)}
               className="block w-full px-4 py-2 text-left hover:bg-g-surface2 transition-colors"
-              style={{ fontFamily: 'Barlow Condensed', fontSize: '13px', color: r === targetRole ? '#F0842C' : '#8888AA' }}
+              style={{ fontFamily: 'Barlow Condensed', fontSize: '13px', color: r === targetRole ? 'var(--orange)' : 'var(--muted)' }}
             >
               {getRoleLabel(r)} {r === targetRole && '✓'}
             </button>
@@ -138,7 +138,7 @@ function RecentPostRow({ post, onDelete, onPin }) {
       <td className="py-3 px-4">
         <div className="flex items-center gap-2">
           <button onClick={() => onPin(post._id, post.isPinned)} className="text-g-muted hover:text-g-green transition-colors" title="Toggle pin">
-            <Pin size={13} style={{ fill: post.isPinned ? '#3AE858' : 'none', color: post.isPinned ? '#3AE858' : undefined }} />
+            <Pin size={13} style={{ fill: post.isPinned ? 'var(--green)' : 'none', color: post.isPinned ? 'var(--green)' : undefined }} />
           </button>
           <button onClick={() => onDelete(post._id)} className="text-g-muted hover:text-g-red transition-colors" title="Delete">
             <Trash2 size={13} />
@@ -264,11 +264,11 @@ function Dashboard() {
               fontSize: '14px',
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
-              color: tab === id ? '#F0842C' : '#8888AA',
-              borderBottom: '2px solid ' + (tab === id ? '#F0842C' : 'transparent'),
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
+              color:        tab === id ? 'var(--orange)' : 'var(--muted)',
+              background:   'none',
+              border:       'none',
+              borderBottom: tab === id ? '2px solid var(--orange)' : '2px solid transparent',
+              cursor:       'pointer',
             }}
           >
             <Icon size={14} /> {label}
@@ -281,9 +281,9 @@ function Dashboard() {
         <div className="space-y-8">
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <StatCard icon={Users}        label="Total Users"    value={stats?.users}    color="#F0842C" />
-            <StatCard icon={FileText}     label="Community Posts" value={stats?.posts}   color="#C8A044" />
-            <StatCard icon={MessageSquare} label="Comments"      value={stats?.comments} color="#3AE858" />
+            <StatCard icon={Users}        label="Total Users"    value={stats?.users}    color="var(--orange)" />
+            <StatCard icon={FileText}     label="Community Posts" value={stats?.posts}   color="var(--gold)" />
+            <StatCard icon={MessageSquare} label="Comments"      value={stats?.comments} color="var(--green)" />
           </div>
 
           {/* Role guide */}
@@ -350,7 +350,7 @@ function Dashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-g-border" style={{ background: '#1c1c28' }}>
+                    <tr className="border-b border-g-border" style={{ background: 'var(--s2)' }}>
                       {['Player', 'Email', 'Role', 'Joined', 'Actions'].map(h => (
                         <th key={h} className="py-3 px-4 text-left font-barlow text-g-muted uppercase tracking-wider" style={{ fontSize: '11px', letterSpacing: '0.1em' }}>
                           {h}
@@ -365,8 +365,8 @@ function Dashboard() {
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-2">
                             {u.imageUrl
-                              ? <img src={u.imageUrl} alt="" className="w-7 h-7 rounded-sm object-cover" style={{ border: '1px solid #2a2a3a' }} />
-                              : <div className="w-7 h-7 flex items-center justify-center font-orbitron text-xs" style={{ background: '#1c1c28', border: '1px solid #2a2a3a', color: '#C8A044' }}>{(u.firstName || u.username || '?').charAt(0)}</div>
+                              ? <img src={u.imageUrl} alt="" className="w-7 h-7 rounded-sm object-cover" style={{ border: '1px solid var(--border)' }} />
+                              : <div className="w-7 h-7 flex items-center justify-center font-orbitron text-xs" style={{ background: 'var(--s2)', border: '1px solid var(--border)', color: 'var(--gold)' }}>{(u.firstName || u.username || '?').charAt(0)}</div>
                             }
                             <div>
                               <div className="text-g-text font-barlow font-600 text-sm">{u.firstName} {u.lastName}</div>
@@ -426,7 +426,7 @@ function Dashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-g-border" style={{ background: '#1c1c28' }}>
+                    <tr className="border-b border-g-border" style={{ background: 'var(--s2)' }}>
                       {['Title / Author', 'Category', 'Posted', 'Actions'].map(h => (
                         <th key={h} className="py-3 px-4 text-left font-barlow text-g-muted uppercase tracking-wider" style={{ fontSize: '11px', letterSpacing: '0.1em' }}>
                           {h}

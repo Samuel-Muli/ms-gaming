@@ -3,25 +3,26 @@ import express from 'express';
 import cors from 'cors';
 import { MongoClient, ObjectId } from 'mongodb';
 import { createClerkClient } from '@clerk/backend';
+import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const app = express();
-const PORT = process.env.PORT || 8000;
+const app       = express();
+const PORT      = process.env.PORT || 8000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 
-// ─── Clerk Client ────────────────────────────────────────────────────────────
+// ─── Clerk ────────────────────────────────────────────────────────────────────
 const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
-// ─── MongoDB ─────────────────────────────────────────────────────────────────
+// ─── MongoDB ──────────────────────────────────────────────────────────────────
 const mongoClient = new MongoClient(MONGODB_URI);
 let db;
 
 async function connectDB() {
   await mongoClient.connect();
   db = mongoClient.db('ms_gaming');
-  // Indexes
   await db.collection('posts').createIndex({ createdAt: -1 });
   await db.collection('posts').createIndex({ category: 1 });
   await db.collection('comments').createIndex({ postId: 1 });
@@ -29,28 +30,51 @@ async function connectDB() {
   console.log('✅ Connected to MongoDB: ms_gaming');
 }
 
-function getObjectId(value) {
-  if (!value) return null;
-  if (value instanceof ObjectId) return value;
-  if (typeof value === 'string' && ObjectId.isValid(value)) return new ObjectId(value);
-  return null;
-}
+// ─── Uploads directory ────────────────────────────────────────────────────────
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
-// ─── Middleware ───────────────────────────────────────────────────────────────
+// ─── Multer storage ───────────────────────────────────────────────────────────
+const storage = multer.diskStorage({
+  destination: UPLOADS_DIR,
+  filename: (_req, file, cb) => {
+    const ext  = path.extname(file.originalname).toLowerCase();
+    const safe = `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`;
+    cb(null, safe);
+  },
+});
+
+const ALLOWED_MIME = new Set([
+  'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+  'video/mp4', 'video/webm', 'video/quicktime',
+]);
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 200 * 1024 * 1024 }, // 200 MB hard cap (superadmin ceiling)
+  fileFilter: (_req, file, cb) => {
+    ALLOWED_MIME.has(file.mimetype)
+      ? cb(null, true)
+      : cb(new Error(`File type "${file.mimetype}" is not allowed.`));
+  },
+});
+
+// ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
+// Serve uploaded files
+app.use('/uploads', express.static(UPLOADS_DIR));
 
-// Auth middleware — attaches userId + role to every request (non-blocking)
+// ─── Auth middleware ──────────────────────────────────────────────────────────
 async function authenticate(req, _res, next) {
   const token = req.headers.authorization?.replace('Bearer ', '').trim();
-  req.userId   = null;
-  req.userRole = 'guest';
+  req.userId      = null;
+  req.userRole    = 'guest';
   req.displayName = 'Player';
 
   if (!token) return next();
 
   try {
-    // Verify the Clerk session JWT
     const result = await clerk.authenticateRequest(
       new Request(`http://localhost${req.url}`, {
         method: req.method,
@@ -58,50 +82,58 @@ async function authenticate(req, _res, next) {
       }),
       { publishableKey: process.env.VITE_CLERK_PUBLISHABLE_KEY }
     );
-
     if (result.isSignedIn) {
-      req.userId = result.toAuth().userId;
-      const user = await clerk.users.getUser(req.userId);
-      req.userRole    = (user.publicMetadata?.role) || 'user';
+      req.userId      = result.toAuth().userId;
+      const user      = await clerk.users.getUser(req.userId);
+      req.userRole    = user.publicMetadata?.role || 'user';
       req.displayName = user.firstName || user.username || 'Player';
       req.imageUrl    = user.imageUrl;
     }
-  } catch {
-    // Invalid token — continue as guest
-  }
+  } catch { /* invalid token — continue as guest */ }
   next();
 }
-
 app.use(authenticate);
 
-// Guard helpers
-const requireAuth = (req, res, next) =>
-  req.userId ? next() : res.status(401).json({ error: 'Login required' });
+// Role guards
+const requireAuth  = (req, res, next) => req.userId ? next() : res.status(401).json({ error: 'Login required' });
+const requireMod   = (req, res, next) => ['moderator','admin','superadmin'].includes(req.userRole) ? next() : res.status(403).json({ error: 'Moderator required' });
+const requireAdmin = (req, res, next) => ['admin','superadmin'].includes(req.userRole) ? next() : res.status(403).json({ error: 'Admin required' });
 
-const requireMod = (req, res, next) =>
-  ['moderator', 'admin', 'superadmin'].includes(req.userRole)
-    ? next()
-    : res.status(403).json({ error: 'Moderator access required' });
+// ─── FILE UPLOAD ──────────────────────────────────────────────────────────────
+const MAX_IMAGE = 3  * 1024 * 1024;   //  3 MB
+const MAX_VIDEO = 40 * 1024 * 1024;   // 40 MB
 
-const requireAdmin = (req, res, next) =>
-  ['admin', 'superadmin'].includes(req.userRole)
-    ? next()
-    : res.status(403).json({ error: 'Admin access required' });
+app.post('/api/upload', requireAuth, upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-const requireSuperAdmin = (req, res, next) =>
-  req.userRole === 'superadmin'
-    ? next()
-    : res.status(403).json({ error: 'Super Admin access required' });
+  const isImage = req.file.mimetype.startsWith('image/');
+  const isVideo = req.file.mimetype.startsWith('video/');
 
-// ─── Community Posts ──────────────────────────────────────────────────────────
+  // Enforce size limits for non-superadmins
+  if (req.userRole !== 'superadmin') {
+    const tooLarge = (isImage && req.file.size > MAX_IMAGE)
+                  || (isVideo && req.file.size > MAX_VIDEO);
+    if (tooLarge) {
+      fs.unlinkSync(req.file.path);   // clean up
+      const limit = isImage ? '3MB' : '40MB';
+      return res.status(400).json({ error: `${isImage ? 'Image' : 'Video'} must be under ${limit}.` });
+    }
+  }
 
-// GET /api/posts  — list (paginated, filterable by category)
+  res.json({
+    url:          `/uploads/${req.file.filename}`,
+    type:         isImage ? 'image' : 'video',
+    size:         req.file.size,
+    originalName: req.file.originalname,
+  });
+});
+
+// ─── COMMUNITY POSTS ─────────────────────────────────────────────────────────
 app.get('/api/posts', async (req, res) => {
   try {
-    const { category = 'all', page = 1, limit = 20, search = '' } = req.query;
+    const { category = 'all', page = 1, limit = 20 } = req.query;
     const filter = { isDeleted: { $ne: true } };
     if (category !== 'all') filter.category = category;
-    if (search) filter.$text = { $search: search };
 
     const [posts, total] = await Promise.all([
       db.collection('posts')
@@ -112,51 +144,37 @@ app.get('/api/posts', async (req, res) => {
         .toArray(),
       db.collection('posts').countDocuments(filter),
     ]);
-
     res.json({ posts, total, pages: Math.ceil(total / +limit) });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// GET /api/posts/:id  — single post + increment views
 app.get('/api/posts/:id', async (req, res) => {
   try {
-    const _id = getObjectId(req.params.id);
-    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
-
+    const _id  = new ObjectId(req.params.id);
     const post = await db.collection('posts').findOne({ _id });
     if (!post || post.isDeleted) return res.status(404).json({ error: 'Post not found' });
 
     await db.collection('posts').updateOne({ _id }, { $inc: { views: 1 } });
-
-    const comments = await db.collection('comments')
+    const comments  = await db.collection('comments')
       .find({ postId: req.params.id, isDeleted: { $ne: true } })
-      .sort({ createdAt: 1 })
-      .toArray();
-
+      .sort({ createdAt: 1 }).toArray();
     const likedByMe = req.userId ? post.likes?.includes(req.userId) : false;
-
     res.json({ ...post, comments, likedByMe });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// POST /api/posts  — create post (auth required)
 app.post('/api/posts', requireAuth, async (req, res) => {
   try {
-    const { title, content, category = 'general', tags = [] } = req.body;
+    const { title, content, category = 'general', tags = [], media = [] } = req.body;
     if (!title?.trim() || !content?.trim())
-      return res.status(400).json({ error: 'Title and content are required' });
+      return res.status(400).json({ error: 'Title and content required' });
 
     const post = {
       title:       title.trim(),
       content:     content.trim(),
       category,
       tags,
+      media,                    // [{ url, type }]
       authorId:    req.userId,
       authorName:  req.displayName,
       authorImage: req.imageUrl,
@@ -168,327 +186,192 @@ app.post('/api/posts', requireAuth, async (req, res) => {
       isPinned:    false,
       isDeleted:   false,
     };
-
     const { insertedId } = await db.collection('posts').insertOne(post);
     res.status(201).json({ ...post, _id: insertedId });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// PUT /api/posts/:id  — update (author or mod+)
 app.put('/api/posts/:id', requireAuth, async (req, res) => {
   try {
-    const _id = getObjectId(req.params.id);
-    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
-
-    const post = await db.collection('posts').findOne({ _id });
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-
-    const canEdit = post.authorId === req.userId || ['moderator', 'admin', 'superadmin'].includes(req.userRole);
-    if (!canEdit) return res.status(403).json({ error: 'Not authorised' });
-
+    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    if (!post) return res.status(404).json({ error: 'Not found' });
+    const canEdit = post.authorId === req.userId || ['moderator','admin','superadmin'].includes(req.userRole);
+    if (!canEdit) return res.status(403).json({ error: 'Forbidden' });
     const { title, content, category, tags } = req.body;
     await db.collection('posts').updateOne(
-      { _id },
+      { _id: new ObjectId(req.params.id) },
       { $set: { title, content, category, tags, updatedAt: new Date() } }
     );
     res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// DELETE /api/posts/:id  — soft delete (author or mod+)
 app.delete('/api/posts/:id', requireAuth, async (req, res) => {
   try {
-    const _id = getObjectId(req.params.id);
-    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
-
-    const post = await db.collection('posts').findOne({ _id });
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-
-    const canDelete = post.authorId === req.userId || ['moderator', 'admin', 'superadmin'].includes(req.userRole);
-    if (!canDelete) return res.status(403).json({ error: 'Not authorised' });
-
-    await db.collection('posts').updateOne(
-      { _id },
-      { $set: { isDeleted: true } }
-    );
+    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    if (!post) return res.status(404).json({ error: 'Not found' });
+    const canDelete = post.authorId === req.userId || ['moderator','admin','superadmin'].includes(req.userRole);
+    if (!canDelete) return res.status(403).json({ error: 'Forbidden' });
+    await db.collection('posts').updateOne({ _id: new ObjectId(req.params.id) }, { $set: { isDeleted: true } });
     res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// POST /api/posts/:id/like  — toggle like
 app.post('/api/posts/:id/like', requireAuth, async (req, res) => {
   try {
-    const _id = getObjectId(req.params.id);
-    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
-
-    const post = await db.collection('posts').findOne({ _id });
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-
+    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    if (!post) return res.status(404).json({ error: 'Not found' });
     const liked = post.likes?.includes(req.userId);
-    const op = liked ? { $pull: { likes: req.userId } } : { $addToSet: { likes: req.userId } };
-    await db.collection('posts').updateOne({ _id }, op);
-
-    const newCount = liked ? (post.likes.length - 1) : (post.likes.length + 1);
-    res.json({ liked: !liked, likeCount: newCount });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+    await db.collection('posts').updateOne(
+      { _id: new ObjectId(req.params.id) },
+      liked ? { $pull: { likes: req.userId } } : { $addToSet: { likes: req.userId } }
+    );
+    res.json({ liked: !liked, likeCount: liked ? post.likes.length - 1 : post.likes.length + 1 });
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// POST /api/posts/:id/pin  — toggle pin (mod+)
 app.post('/api/posts/:id/pin', requireAuth, requireMod, async (req, res) => {
   try {
-    const _id = getObjectId(req.params.id);
-    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
-
-    const post = await db.collection('posts').findOne({ _id });
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-
-    await db.collection('posts').updateOne(
-      { _id },
-      { $set: { isPinned: !post.isPinned } }
-    );
+    const post = await db.collection('posts').findOne({ _id: new ObjectId(req.params.id) });
+    if (!post) return res.status(404).json({ error: 'Not found' });
+    await db.collection('posts').updateOne({ _id: new ObjectId(req.params.id) }, { $set: { isPinned: !post.isPinned } });
     res.json({ isPinned: !post.isPinned });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// ─── Comments ────────────────────────────────────────────────────────────────
-
-// GET /api/posts/:id/comments
+// ─── COMMENTS ─────────────────────────────────────────────────────────────────
 app.get('/api/posts/:id/comments', async (req, res) => {
   try {
     const comments = await db.collection('comments')
       .find({ postId: req.params.id, isDeleted: { $ne: true } })
-      .sort({ createdAt: 1 })
-      .toArray();
+      .sort({ createdAt: 1 }).toArray();
     res.json(comments);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// POST /api/posts/:id/comments
 app.post('/api/posts/:id/comments', requireAuth, async (req, res) => {
   try {
-    const _id = getObjectId(req.params.id);
-    if (!_id) return res.status(400).json({ error: 'Invalid post id' });
-
     const { content, parentId = null } = req.body;
     if (!content?.trim()) return res.status(400).json({ error: 'Content required' });
-
     const comment = {
-      postId:      req.params.id,
-      content:     content.trim(),
-      parentId,
-      authorId:    req.userId,
-      authorName:  req.displayName,
-      authorImage: req.imageUrl,
-      createdAt:   new Date(),
-      likes:       [],
-      isDeleted:   false,
+      postId: req.params.id, content: content.trim(), parentId,
+      authorId: req.userId, authorName: req.displayName, authorImage: req.imageUrl,
+      createdAt: new Date(), likes: [], isDeleted: false,
     };
-
     const { insertedId } = await db.collection('comments').insertOne(comment);
-    await db.collection('posts').updateOne(
-      { _id },
-      { $inc: { commentCount: 1 } }
-    );
-
+    await db.collection('posts').updateOne({ _id: new ObjectId(req.params.id) }, { $inc: { commentCount: 1 } });
     res.status(201).json({ ...comment, _id: insertedId });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// DELETE /api/comments/:id  — soft delete (author or mod+)
 app.delete('/api/comments/:id', requireAuth, async (req, res) => {
   try {
-    const commentId = getObjectId(req.params.id);
-    if (!commentId) return res.status(400).json({ error: 'Invalid comment id' });
-
-    const comment = await db.collection('comments').findOne({ _id: commentId });
-    if (!comment) return res.status(404).json({ error: 'Comment not found' });
-
-    const canDelete = comment.authorId === req.userId || ['moderator', 'admin', 'superadmin'].includes(req.userRole);
-    if (!canDelete) return res.status(403).json({ error: 'Not authorised' });
-
-    await db.collection('comments').updateOne(
-      { _id: commentId },
-      { $set: { isDeleted: true } }
-    );
+    const c = await db.collection('comments').findOne({ _id: new ObjectId(req.params.id) });
+    if (!c) return res.status(404).json({ error: 'Not found' });
+    const canDelete = c.authorId === req.userId || ['moderator','admin','superadmin'].includes(req.userRole);
+    if (!canDelete) return res.status(403).json({ error: 'Forbidden' });
+    await db.collection('comments').updateOne({ _id: new ObjectId(req.params.id) }, { $set: { isDeleted: true } });
     res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// ─── Article Comments ────────────────────────────────────────────────────────
-
+// ─── ARTICLE COMMENTS ─────────────────────────────────────────────────────────
 app.get('/api/articles/:slug/comments', async (req, res) => {
   try {
     const comments = await db.collection('article_comments')
       .find({ slug: req.params.slug, isDeleted: { $ne: true } })
-      .sort({ createdAt: -1 })
-      .toArray();
+      .sort({ createdAt: -1 }).toArray();
     res.json(comments);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
 app.post('/api/articles/:slug/comments', requireAuth, async (req, res) => {
   try {
     const { content } = req.body;
     if (!content?.trim()) return res.status(400).json({ error: 'Content required' });
-
     const comment = {
-      slug:        req.params.slug,
-      content:     content.trim(),
-      authorId:    req.userId,
-      authorName:  req.displayName,
-      authorImage: req.imageUrl,
-      createdAt:   new Date(),
-      likes:       [],
-      isDeleted:   false,
+      slug: req.params.slug, content: content.trim(),
+      authorId: req.userId, authorName: req.displayName, authorImage: req.imageUrl,
+      createdAt: new Date(), likes: [], isDeleted: false,
     };
-
     const { insertedId } = await db.collection('article_comments').insertOne(comment);
     res.status(201).json({ ...comment, _id: insertedId });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// ─── Admin Endpoints ─────────────────────────────────────────────────────────
-
-// GET /api/admin/stats
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
 app.get('/api/admin/stats', requireAuth, requireMod, async (req, res) => {
   try {
-    const [postCount, commentCount, articleCommentCount, users] = await Promise.all([
+    const [postCount, commentCount, users] = await Promise.all([
       db.collection('posts').countDocuments({ isDeleted: { $ne: true } }),
       db.collection('comments').countDocuments({ isDeleted: { $ne: true } }),
-      db.collection('article_comments').countDocuments({ isDeleted: { $ne: true } }),
       clerk.users.getUserList({ limit: 1 }),
     ]);
-    res.json({
-      posts: postCount,
-      comments: commentCount + articleCommentCount,
-      users: users.totalCount,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+    res.json({ posts: postCount, comments: commentCount, users: users.totalCount });
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// GET /api/admin/users
 app.get('/api/admin/users', requireAuth, requireAdmin, async (req, res) => {
   try {
     const { limit = 50, offset = 0 } = req.query;
     const result = await clerk.users.getUserList({ limit: +limit, offset: +offset });
-
-    const users = result.data.map(u => ({
-      id:          u.id,
-      firstName:   u.firstName,
-      lastName:    u.lastName,
-      email:       u.emailAddresses[0]?.emailAddress,
-      username:    u.username,
-      imageUrl:    u.imageUrl,
-      role:        u.publicMetadata?.role || 'user',
-      createdAt:   u.createdAt,
-      lastSignInAt: u.lastSignInAt,
+    const users  = result.data.map(u => ({
+      id: u.id, firstName: u.firstName, lastName: u.lastName,
+      email: u.emailAddresses[0]?.emailAddress,
+      username: u.username, imageUrl: u.imageUrl,
+      role: u.publicMetadata?.role || 'user',
+      createdAt: u.createdAt, lastSignInAt: u.lastSignInAt,
     }));
-
     res.json({ users, total: result.totalCount });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// POST /api/admin/set-role
-// Superadmin can set any role.
-// Admin can only assign/remove "moderator" — cannot touch admins or superadmins.
 app.post('/api/admin/set-role', requireAuth, requireAdmin, async (req, res) => {
   try {
     const { userId, role } = req.body;
-    const validRoles = ['user', 'moderator', 'admin', 'superadmin'];
-    if (!validRoles.includes(role))
-      return res.status(400).json({ error: 'Invalid role' });
+    const validRoles = ['user','moderator','admin','superadmin'];
+    if (!validRoles.includes(role)) return res.status(400).json({ error: 'Invalid role' });
 
-    const target = await clerk.users.getUser(userId);
+    const target     = await clerk.users.getUser(userId);
     const targetRole = target.publicMetadata?.role || 'user';
 
-    // Admins (non-superadmin) restrictions:
     if (req.userRole === 'admin') {
-      if (['admin', 'superadmin'].includes(role))
-        return res.status(403).json({ error: 'Admins cannot grant admin or superadmin role' });
-      if (['admin', 'superadmin'].includes(targetRole))
-        return res.status(403).json({ error: 'Admins cannot modify other admins or superadmins' });
+      if (['admin','superadmin'].includes(role))       return res.status(403).json({ error: 'Admins cannot grant admin/superadmin' });
+      if (['admin','superadmin'].includes(targetRole)) return res.status(403).json({ error: 'Admins cannot modify admin accounts' });
     }
-
-    // Superadmin is immutable by non-superadmins
     if (targetRole === 'superadmin' && req.userRole !== 'superadmin')
-      return res.status(403).json({ error: 'Only the Super Admin can modify this account' });
-
-    // Prevent demoting yourself off superadmin
+      return res.status(403).json({ error: 'Only Super Admin can modify this account' });
     if (userId === req.userId && targetRole === 'superadmin' && role !== 'superadmin')
-      return res.status(400).json({ error: 'You cannot demote your own Super Admin account' });
+      return res.status(400).json({ error: 'Cannot demote your own Super Admin account' });
 
     await clerk.users.updateUserMetadata(userId, { publicMetadata: { role } });
     res.json({ success: true, message: `Role set to "${role}"` });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });
 
-// GET /api/admin/recent-posts  — for mod dashboard
 app.get('/api/admin/recent-posts', requireAuth, requireMod, async (req, res) => {
   try {
-    const posts = await db.collection('posts')
-      .find({})
-      .sort({ createdAt: -1 })
-      .limit(20)
-      .toArray();
+    const posts = await db.collection('posts').find({}).sort({ createdAt: -1 }).limit(20).toArray();
     res.json(posts);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
 
-// ─── Serve React in production ────────────────────────────────────────────────
+// ─── Production static ────────────────────────────────────────────────────────
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/dist')));
-  app.get('*', (_req, res) =>
-    res.sendFile(path.join(__dirname, 'client/dist/index.html'))
-  );
+  app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'client/dist/index.html')));
 }
 
-// ─── Start ───────────────────────────────────────────────────────────────────
+// ─── Multer error handler ─────────────────────────────────────────────────────
+app.use((err, _req, res, _next) => {
+  if (err instanceof multer.MulterError || err.message?.includes('not allowed')) {
+    return res.status(400).json({ error: err.message });
+  }
+  console.error(err);
+  res.status(500).json({ error: 'Server error' });
+});
+
+// ─── Start ────────────────────────────────────────────────────────────────────
 connectDB()
-  .then(() =>
-    app.listen(PORT, () =>
-      console.log(`🎮 M S Gaming server running → http://localhost:${PORT}`)
-    )
-  )
-  .catch(err => {
-    console.error('❌ Failed to connect to MongoDB:', err.message);
-    process.exit(1);
-  });
+  .then(() => app.listen(PORT, () => console.log(`🎮 M S Gaming → http://localhost:${PORT}`)))
+  .catch(err => { console.error('❌ MongoDB failed:', err.message); process.exit(1); });

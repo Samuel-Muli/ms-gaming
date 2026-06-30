@@ -1,4 +1,5 @@
 import { Smartphone } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import { phoneArticles } from '../data/phones'
 
@@ -10,7 +11,7 @@ export default function GamingPhones() {
       <div className="mb-10 pb-6 border-b border-g-border">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 flex items-center justify-center" style={{ background: 'rgba(58,138,232,0.1)', border: '1px solid rgba(58,138,232,0.2)' }}>
-            <Smartphone size={20} style={{ color: '#3A8AE8' }} />
+            <Smartphone size={20} style={{ color: 'var(--blue)' }} />
           </div>
           <span className="section-label">Hardware</span>
         </div>
@@ -46,10 +47,10 @@ export default function GamingPhones() {
         className="mt-10 gaming-card p-6 text-center"
         style={{ background: 'rgba(58,138,232,0.03)' }}
       >
-        <Smartphone size={28} style={{ color: '#3A8AE8', margin: '0 auto 12px' }} />
+        <Smartphone size={28} style={{ color: 'var(--blue)', margin: '0 auto 12px' }} />
         <p className="text-g-muted" style={{ fontFamily: 'Rajdhani' }}>
           More phone reviews dropping soon. Check back or{' '}
-          <a href="/community" className="text-g-orange hover:underline">ask in the community</a>.
+          <Link to="/community" className="text-g-orange hover:underline">ask in the community</Link>.
         </p>
       </div>
     </div>

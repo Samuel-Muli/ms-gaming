@@ -185,4 +185,28 @@ Fonts: **Orbitron** (logo/stats) · **Barlow Condensed** (headings/labels) · **
 
 ---
 
+---
+
+## 🛠️ Troubleshooting
+
+**`npm install` fails with `ERESOLVE` errors:**
+This was an issue in an earlier version (`lucide-react@0.383.0` didn't support React 19). It's fixed — if you still hit dependency errors, delete `node_modules` and `package-lock.json` in both the root and `client/` folders, then reinstall.
+
+**Sign In button does nothing when clicked:**
+1. Confirm `client/.env` exists and contains `VITE_CLERK_PUBLISHABLE_KEY=pk_test_...`. If it's missing, the app now shows an on-screen error explaining exactly this — it no longer fails silently.
+2. **Note on Git:** `.env` is intentionally listed in `.gitignore` (so secrets never get committed). If you cloned or pulled this project through Git, `.env` will **not** come through automatically — copy it over manually from this delivered zip.
+3. Vite only reads `.env` on startup — if you edit it, fully stop and restart `npm run dev`.
+
+**Colors look wrong in light/dark mode:**
+Fixed — all theme colors now flow through CSS variables (`var(--bg)`, `var(--text)`, etc.) via `tailwind.config.js`, so every component responds correctly to the theme toggle.
+
+---
+
+## 🔒 Security Notes
+
+- `multer` is pinned to `^2.2.0`, which patches a denial-of-service vulnerability (CVE-2025-7338) present in all `1.x` releases, where a single malformed upload request could crash the whole server. This was tested directly against the exploit pattern as part of building this project.
+- Run `npm audit` periodically in both the root and `client/` folders to catch newly-disclosed vulnerabilities in dependencies over time.
+
+---
+
 *Built by 【M。S】 — PUBG Community Hub*

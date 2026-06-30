@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse at 50% 30%, rgba(240,132,44,0.08) 0%, transparent 60%), #0a0a0f' }}
+      style={{ background: 'radial-gradient(ellipse at 50% 30%, rgba(240,132,44,0.08) 0%, transparent 60%), var(--bg)' }}
     >
       {/* Grid */}
       <div className="absolute inset-0 grid-overlay opacity-40" />
@@ -39,7 +39,7 @@ export default function NotFound() {
         </div>
 
         {/* Labels */}
-        <div className="section-label mb-3" style={{ color: '#E83A3A' }}>ZONE NOT FOUND</div>
+        <div className="section-label mb-3" style={{ color: 'var(--red)' }}>ZONE NOT FOUND</div>
 
         <h1 className="font-barlow font-700 text-2xl text-g-text uppercase tracking-wide mb-3">
           You Dropped Outside the Map

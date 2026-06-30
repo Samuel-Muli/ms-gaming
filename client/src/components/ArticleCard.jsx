@@ -42,10 +42,10 @@ export default function ArticleCard({ article, size = 'normal' }) {
             <span className={`badge ${cat.cls}`}>{cat.label}</span>
           </div>
 
-          {/* Read time */}
+          {/* Read time — fixed light color since the thumbnail stays dark in both themes */}
           <div
-            className="absolute bottom-3 right-3 flex items-center gap-1 text-g-muted"
-            style={{ fontSize: '11px', fontFamily: 'Barlow Condensed', letterSpacing: '0.05em' }}
+            className="absolute bottom-3 right-3 flex items-center gap-1"
+            style={{ fontSize: '11px', fontFamily: 'Barlow Condensed', letterSpacing: '0.05em', color: '#b8b8d0' }}
           >
             <Clock size={10} />
             {article.readTime} MIN READ

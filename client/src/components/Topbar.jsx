@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Youtube, Twitch, Twitter, MessageCircle, Wifi } from 'lucide-react'
 
 const NEWS_ITEMS = [
-  '🔥 PUBG Season 2025 — New Rondo map updates & ranked season changes now LIVE',
+  '🔥 PUBG Season 2025 — New Deston map updates & ranked season changes now LIVE',
   '⚡ Community Alert — 【M。S】 gaming tips series: Drop Zone Mastery is up now',
   '🎮 Gaming Phone Showdown — ROG Phone 9 vs RedMagic 10 Pro: full comparison inside',
   '🏆 PUBG Global Championship 2025 — Group stage results & bracket breakdown',
@@ -51,7 +51,7 @@ export default function Topbar() {
           <div className="flex-1 overflow-hidden relative">
             <div
               className="whitespace-nowrap animate-ticker"
-              style={{ fontFamily: 'Barlow Condensed', fontSize: '12px', color: '#c8c8d8', letterSpacing: '0.02em' }}
+              style={{ fontFamily: 'Barlow Condensed', fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.02em' }}
             >
               {NEWS_ITEMS.join('   •••   ')}
               &nbsp;&nbsp;&nbsp;•••&nbsp;&nbsp;&nbsp;
@@ -75,22 +75,24 @@ export default function Topbar() {
 
           <div className="w-px h-4 bg-g-border" />
 
-          {/* Social icons */}
-          <div className="flex items-center gap-2">
+          {/* Social icons — quick links (full list with real URLs lives in the Footer) */}
+          <div className="hidden sm:flex items-center gap-2">
             {[
-              { Icon: Twitter,       href: '#', label: 'X / Twitter',  col: '#8888AA' },
-              { Icon: Youtube,       href: '#', label: 'YouTube',      col: '#E83A3A' },
-              { Icon: Twitch,        href: '#', label: 'Twitch',       col: '#9B59B6' },
-              { Icon: MessageCircle, href: '#', label: 'Discord',      col: '#5865F2' },
+              { Icon: Twitter,       href: 'https://x.com/Kithome_SaMu',           label: 'X / Twitter', col: '#1DA1F2' },
+              { Icon: Youtube,       href: 'https://wa.me/254705244235',           label: 'YouTube',     col: '#E83A3A' },
+              { Icon: Twitch,        href: 'https://www.instagram.com/dulcet265',  label: 'Instagram',   col: '#9B59B6' },
+              { Icon: MessageCircle, href: 'https://wa.me/254705244235',           label: 'WhatsApp',    col: '#25D366' },
             ].map(({ Icon, href, label, col }) => (
               <a
                 key={label}
                 href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="transition-all hover:scale-110"
-                style={{ color: '#8888AA' }}
+                style={{ color: 'var(--muted)' }}
                 onMouseEnter={e => (e.currentTarget.style.color = col)}
-                onMouseLeave={e => (e.currentTarget.style.color = '#8888AA')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
               >
                 <Icon size={13} />
               </a>

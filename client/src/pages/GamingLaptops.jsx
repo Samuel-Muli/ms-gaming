@@ -1,4 +1,5 @@
 import { Monitor } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import { laptopArticles } from '../data/laptops'
 
@@ -20,7 +21,7 @@ export default function GamingLaptops() {
           <div className="w-10 h-10 flex items-center justify-center" style={{ background: 'rgba(200,160,68,0.1)', border: '1px solid rgba(200,160,68,0.2)' }}>
             <Monitor size={20} className="text-g-gold" />
           </div>
-          <span className="section-label" style={{ color: '#C8A044' }}>Hardware</span>
+          <span className="section-label" style={{ color: 'var(--gold)' }}>Hardware</span>
         </div>
         <h1 className="font-barlow font-800 text-3xl md:text-4xl text-g-text uppercase tracking-wide mb-2">Laptops & Consoles</h1>
         <p className="text-g-muted max-w-xl" style={{ fontFamily: 'Rajdhani', fontSize: '16px' }}>
@@ -70,7 +71,7 @@ export default function GamingLaptops() {
         <Monitor size={28} className="text-g-gold mx-auto mb-3" />
         <p className="text-g-muted" style={{ fontFamily: 'Rajdhani' }}>
           PC build guides and console comparisons coming soon.{' '}
-          <a href="/community?cat=hardware" className="text-g-gold hover:underline">Discuss hardware in the community.</a>
+          <Link to="/community?cat=hardware" className="text-g-gold hover:underline">Discuss hardware in the community.</Link>
         </p>
       </div>
     </div>

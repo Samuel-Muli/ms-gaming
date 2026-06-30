@@ -26,15 +26,15 @@ export default function PostCard({ post }) {
     <Link to={`/community/${post._id}`} className="block group">
       <div
         className="gaming-card p-4 flex items-start gap-4"
-        style={{ borderLeft: post.isPinned ? '2px solid #3AE858' : undefined }}
+        style={{ borderLeft: post.isPinned ? '2px solid var(--green)' : undefined }}
       >
         {/* Left — author avatar placeholder */}
         <div
           className="w-10 h-10 shrink-0 flex items-center justify-center font-orbitron font-700 text-xs"
           style={{
-            background: `linear-gradient(135deg, #1c1c28, #2a2a3a)`,
-            border: '1px solid #2a2a3a',
-            color: '#C8A044',
+            background: 'linear-gradient(135deg, var(--s2), var(--border))',
+            border: '1px solid var(--border)',
+            color: 'var(--gold)',
           }}
         >
           {post.authorName?.charAt(0)?.toUpperCase() || '?'}
