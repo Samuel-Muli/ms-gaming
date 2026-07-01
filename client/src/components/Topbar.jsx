@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Youtube, Twitch, Twitter, MessageCircle, Wifi } from 'lucide-react'
+import { Youtube, Instagram, Twitter, MessageCircle, Wifi } from 'lucide-react'
 
 const NEWS_ITEMS = [
-  '🔥 PUBG Season 2025 — New Deston map updates & ranked season changes now LIVE',
+  '🔥 PUBG Season 2025 — New Rondo map updates & ranked season changes now LIVE',
   '⚡ Community Alert — 【M。S】 gaming tips series: Drop Zone Mastery is up now',
   '🎮 Gaming Phone Showdown — ROG Phone 9 vs RedMagic 10 Pro: full comparison inside',
-  '🏆 PUBG Global Championship 2025 — Group stage results & bracket breakdown',
-  '📱 Best gaming phones for PUBG Mobile in 2025 — ranked & reviewed',
+  '🏆 PUBG Global Championship 2026 — Group stage results & bracket breakdown',
+  '📱 Best gaming phones for PUBG Mobile in 2026 — ranked & reviewed',
   '🖥️ MSI Titan GT77 review — Can it handle PUBG at ultra settings?',
   '🗺️ Mastering Erangel — Advanced hot-drop strategies by 【M。S】',
 ]
@@ -79,8 +79,8 @@ export default function Topbar() {
           <div className="hidden sm:flex items-center gap-2">
             {[
               { Icon: Twitter,       href: 'https://x.com/Kithome_SaMu',           label: 'X / Twitter', col: '#1DA1F2' },
-              { Icon: Youtube,       href: 'https://wa.me/254705244235',           label: 'YouTube',     col: '#E83A3A' },
-              { Icon: Twitch,        href: 'https://www.instagram.com/dulcet265',  label: 'Instagram',   col: '#9B59B6' },
+              { Icon: Youtube,       href: 'https://www.youtube.com/@LoveIsScam-k3l',           label: 'YouTube',     col: '#E83A3A' },
+              { Icon: Instagram,        href: 'https://www.instagram.com/dulcet265',  label: 'Instagram',   col: '#9B59B6' },
               { Icon: MessageCircle, href: 'https://wa.me/254705244235',           label: 'WhatsApp',    col: '#25D366' },
             ].map(({ Icon, href, label, col }) => (
               <a

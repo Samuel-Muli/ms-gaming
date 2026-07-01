@@ -2,8 +2,8 @@ import { Crosshair, Target, Zap, Shield } from 'lucide-react'
 
 const STATS = [
   { label: 'MATCHES',  value: '2.4K+' },
-  { label: 'K/D',      value: '3.8'   },
-  { label: 'WIN RATE', value: '18%'   },
+  { label: 'K/D',      value: '4.1'   },
+  { label: 'WIN RATE', value: '24%'   },
 ]
 
 export default function PlayerCard() {
@@ -27,6 +27,7 @@ export default function PlayerCard() {
         {/* Avatar */}
         <div className="pc-avatar">
           <Crosshair size={36} className="pc-avatar-icon" />
+          <div className="pc-avatar-radar" />
           <div className="pc-avatar-ring" />
         </div>
 
