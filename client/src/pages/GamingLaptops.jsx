@@ -3,75 +3,60 @@ import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import { laptopArticles } from '../data/laptops'
 
-const TABS = [
-  { id: 'laptops', label: 'Laptops' },
-  { id: 'ps5',     label: 'PlayStation' },
-  { id: 'xbox',    label: 'Xbox' },
-  { id: 'switch',  label: 'Nintendo' },
-  { id: 'pc',      label: 'PC Builds' },
-]
-
 export default function GamingLaptops() {
+  const featured = laptopArticles.find(a => a.featured)
+  const rest = laptopArticles.filter(a => !a.featured)
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
-
-      {/* Page header */}
-      <div className="mb-10 pb-6 border-b border-g-border">
+      {/* Header */}
+      <div className="mb-10 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 flex items-center justify-center" style={{ background: 'rgba(200,160,68,0.1)', border: '1px solid rgba(200,160,68,0.2)' }}>
-            <Monitor size={20} className="text-g-gold" />
+          <div className="w-10 h-10 flex items-center justify-center"
+            style={{ background: 'rgba(200,160,68,0.1)', border: '1px solid rgba(200,160,68,0.2)' }}>
+            <Monitor size={20} style={{ color: 'var(--gold)' }} />
           </div>
-          <span className="section-label" style={{ color: 'var(--gold)' }}>Hardware</span>
+          <span className="section-label" style={{ color: 'var(--gold)' }}>Hardware · Laptops &amp; Consoles</span>
         </div>
-        <h1 className="font-barlow font-800 text-3xl md:text-4xl text-g-text uppercase tracking-wide mb-2">Laptops & Consoles</h1>
-        <p className="text-g-muted max-w-xl" style={{ fontFamily: 'Rajdhani', fontSize: '16px' }}>
-          Reviews and buying guides for gaming laptops, PS5, Xbox, Nintendo, and custom PC builds — all evaluated for gaming performance.
+        <h1 className="font-barlow font-800 uppercase tracking-wide text-g-text mb-2"
+          style={{ fontSize: 'clamp(24px, 4vw, 40px)' }}>Laptops &amp; Consoles</h1>
+        <p style={{ fontFamily: 'Rajdhani', fontSize: '16px', color: 'var(--muted)', maxWidth: 560 }}>
+          Reviews and buying guides for gaming laptops, PS5, Xbox, Nintendo, and custom PC builds.
         </p>
-
-        {/* Anchor tabs */}
         <div className="flex flex-wrap gap-2 mt-5">
-          {TABS.map(t => (
-            <a
-              key={t.id}
-              href={`#${t.id}`}
-              className="btn btn-ghost text-xs px-3 py-1.5"
-            >
-              {t.label}
+          {[['laptops','Laptops'],['ps5','PlayStation'],['xbox','Xbox'],['switch','Nintendo'],['pc','PC']].map(([id, label]) => (
+            <a key={id} href={`#${id}`} className="btn btn-ghost text-xs px-3 py-1.5" style={{ color: 'var(--gold)', borderColor: 'rgba(200,160,68,0.4)' }}>
+              {label}
             </a>
           ))}
         </div>
       </div>
 
       {/* Featured */}
-      {laptopArticles[0] && (
+      {featured && (
         <div id="laptops" className="mb-10">
-          <div className="section-label mb-4">Featured: Laptops</div>
-          <ArticleCard article={laptopArticles[0]} size="large" />
+          <div className="section-label mb-4" style={{ color: 'var(--gold)' }}>Featured</div>
+          <ArticleCard article={featured} size="large" />
         </div>
       )}
 
-      {/* Rest of articles */}
-      <div id="ps5" className="mb-4">
-        <div className="section-label mb-4">All Articles</div>
+      {/* ALL articles */}
+      <div id="ps5">
+        <div className="section-label mb-4" style={{ color: 'var(--gold)' }}>All Articles ({laptopArticles.length})</div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {laptopArticles.slice(1).map((a, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {rest.map((a, i) => (
           <div key={a.slug} className="animate-slide-up" style={{ animationDelay: `${i * 0.05}s` }}>
             <ArticleCard article={a} />
           </div>
         ))}
       </div>
 
-      {/* More soon */}
-      <div
-        id="xbox"
-        className="mt-10 gaming-card gold-card p-6 text-center"
-        style={{ background: 'rgba(200,160,68,0.03)' }}
-      >
-        <Monitor size={28} className="text-g-gold mx-auto mb-3" />
-        <p className="text-g-muted" style={{ fontFamily: 'Rajdhani' }}>
+      <div id="xbox" className="mt-10 gaming-card gold-card p-6 text-center" style={{ background: 'rgba(200,160,68,0.03)' }}>
+        <Monitor size={28} style={{ color: 'var(--gold)', margin: '0 auto 12px' }} />
+        <p style={{ fontFamily: 'Rajdhani', color: 'var(--muted)' }}>
           PC build guides and console comparisons coming soon.{' '}
-          <Link to="/community?cat=hardware" className="text-g-gold hover:underline">Discuss hardware in the community.</Link>
+          <Link to="/community?cat=hardware" style={{ color: 'var(--gold)' }}>Discuss hardware in the community.</Link>
         </p>
       </div>
     </div>

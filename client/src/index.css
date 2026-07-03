@@ -105,7 +105,7 @@ body {
   flex-shrink: 0;
 }
 
-.player-card::before {
+.player-card::before { will-change: transform;
   content: '';
   position: absolute;
   width: 120px;
@@ -745,7 +745,7 @@ select.input { cursor: pointer; }
     linear-gradient(90deg, rgba(240,132,44,0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
-.scanlines { position: relative; overflow: hidden; }
+.scanlines { position: relative; }
 .scanlines::after {
   content: '';
   position: absolute; inset: 0; pointer-events: none; z-index: 1;
@@ -757,15 +757,16 @@ select.input { cursor: pointer; }
 /* ═══════════════════════════════════════════════════════════════════════════
    ANIMATIONS (keyframes)
 ═══════════════════════════════════════════════════════════════════════════ */
-@keyframes ticker    { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+@keyframes ticker { 0% { transform: translate3d(100vw, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 @keyframes float     { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 @keyframes slideUp   { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
+/* heroGlow uses transform to avoid paint — GPU composited */
 @keyframes heroGlow  {
   0%,100% { box-shadow: 0 0 40px rgba(240,132,44,0.15); }
   50%     { box-shadow: 0 0 70px rgba(240,132,44,0.4), 0 0 120px rgba(240,132,44,0.1); }
 }
-@keyframes blink     { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes blink { 0%,100% { opacity: 1; transform: translateZ(0); } 50% { opacity: 0; transform: translateZ(0); } }
 @keyframes pulseGlow {
   0%,100% { opacity: 0.6; } 50% { opacity: 1; }
 }
@@ -774,10 +775,10 @@ select.input { cursor: pointer; }
   20%,24%,55% { opacity: 0.4; }
 }
 
-.animate-float     { animation: float 4s ease-in-out infinite; }
+.animate-float     { animation: float 4s ease-in-out infinite; will-change: transform; }
 .animate-hero-glow { animation: heroGlow 3s ease-in-out infinite; }
-.animate-blink     { animation: blink 1s step-end infinite; }
-.animate-ticker    { animation: ticker 45s linear infinite; }
+.animate-blink     { animation: blink 1s step-end infinite; will-change: opacity; transform: translateZ(0); }
+.animate-ticker    { animation: ticker 45s linear infinite; will-change: transform; }
 .animate-slide-up  { animation: slideUp 0.4s ease-out both; }
 .animate-fade-in   { animation: fadeIn 0.4s ease-out both; }
 .animate-neon      { animation: neonFlicker 3s ease infinite; }

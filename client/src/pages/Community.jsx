@@ -19,7 +19,7 @@ const CATEGORIES = [
 const EMPTY_FORM = { title: '', content: '', category: 'general' }
 const MAX_IMAGE_MB = 3
 const MAX_VIDEO_MB = 40
-const MAX_VIDEO_SECS = 30
+const MAX_VIDEO_SECS = 45
 
 /* ── Media uploader ───────────────────────────────────────────────────────── */
 function MediaUploader({ onAdded, isSuperAdmin }) {

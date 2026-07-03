@@ -1,11 +1,22 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react'
-import { Menu, X, ChevronDown, Crosshair, Shield, Sun, Moon, RefreshCw } from 'lucide-react'
+import { Menu, X, ChevronDown, Crosshair, Shield, Sun, Moon, RefreshCw, Home } from 'lucide-react'
 import { useRole } from '../hooks/useRole'
 import { useTheme } from '../context/ThemeContext'
 
+// Events FIRST, then phones, laptops, community
 const NAV_LINKS = [
+  {
+    label: 'Games & Events',
+    path: '/upcoming-games',
+    items: [
+      { label: 'Upcoming Releases', path: '/upcoming-games#releases' },
+      { label: 'PUBG Updates',      path: '/upcoming-games#pubg' },
+      { label: 'Tournaments',       path: '/upcoming-games#tournaments' },
+      { label: 'Gaming Expos',      path: '/upcoming-games#expos' },
+    ],
+  },
   {
     label: 'Gaming Phones',
     path: '/gaming-phones',
@@ -24,17 +35,7 @@ const NAV_LINKS = [
       { label: 'PlayStation 5 / PS5 Pro', path: '/laptops-consoles#ps5' },
       { label: 'Xbox Series X',           path: '/laptops-consoles#xbox' },
       { label: 'Nintendo Switch',         path: '/laptops-consoles#switch' },
-      { label: 'PC Builds',              path: '/laptops-consoles#pc' },
-    ],
-  },
-  {
-    label: 'Games & Events',
-    path: '/upcoming-games',
-    items: [
-      { label: 'Upcoming Releases', path: '/upcoming-games#releases' },
-      { label: 'PUBG Updates',      path: '/upcoming-games#pubg' },
-      { label: 'Tournaments',       path: '/upcoming-games#tournaments' },
-      { label: 'Gaming Expos',      path: '/upcoming-games#expos' },
+      { label: 'PC Builds',               path: '/laptops-consoles#pc' },
     ],
   },
   {
@@ -49,60 +50,72 @@ const NAV_LINKS = [
   },
 ]
 
-// Desktop dropdown — opens on hover
-function DesktopNavItem({ link, onNavigate }) {
+/* ── Desktop dropdown — hover to open ─────────────────────────────────────── */
+function DesktopNavItem({ link }) {
   const [open, setOpen] = useState(false)
-  const timeoutRef = useRef(null)
+  const hideTimer = useRef(null)
+  const containerRef = useRef(null)
 
-  const show = () => { clearTimeout(timeoutRef.current); setOpen(true) }
-  const hide = () => { timeoutRef.current = setTimeout(() => setOpen(false), 120) }
+  const show = () => {
+    clearTimeout(hideTimer.current)
+    setOpen(true)
+  }
+  const scheduleHide = () => {
+    hideTimer.current = setTimeout(() => setOpen(false), 180)
+  }
+
+  useEffect(() => () => clearTimeout(hideTimer.current), [])
 
   return (
     <div
+      ref={containerRef}
       className="relative"
       onMouseEnter={show}
-      onMouseLeave={hide}
+      onMouseLeave={scheduleHide}
+      style={{ isolation: 'isolate' }}  // own stacking context so dropdown is never clipped
     >
       <NavLink
         to={link.path}
         className={({ isActive }) =>
-          `flex items-center gap-1 font-barlow font-600 uppercase tracking-wider py-2 px-2 transition-colors text-sm ${
+          `flex items-center gap-1 font-barlow font-600 uppercase tracking-wider py-2 px-2.5 transition-colors text-sm ${
             isActive ? 'text-g-orange' : 'text-g-muted hover:text-g-text'
           }`
         }
-        style={{ letterSpacing: '0.06em' }}
+        style={{ letterSpacing: '0.06em', whiteSpace: 'nowrap' }}
       >
         {link.label}
         {link.items && (
           <ChevronDown
             size={12}
-            className="transition-transform"
-            style={{ transform: open ? 'rotate(180deg)' : 'none' }}
+            style={{
+              transition: 'transform 0.2s',
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+              flexShrink: 0,
+            }}
           />
         )}
       </NavLink>
 
+      {/* Dropdown — only shows when open, stays open while hovering it */}
       {open && link.items && (
         <div
           className="dropdown-menu"
           onMouseEnter={show}
-          onMouseLeave={hide}
+          onMouseLeave={scheduleHide}
+          style={{ zIndex: 9999 }}   // make absolutely sure it's on top
         >
-          {link.items.map(i => (
+          {link.items.map(item => (
             <Link
-              key={i.label}
-              to={i.path}
-              onClick={() => { setOpen(false); onNavigate?.() }}
+              key={item.label}
+              to={item.path}
+              onClick={() => setOpen(false)}
               className="block px-4 py-2.5 transition-colors"
-              style={{
-                fontFamily: 'Rajdhani', fontSize: '14px',
-                color: 'var(--muted)',
-              }}
+              style={{ fontFamily: 'Rajdhani', fontSize: '14px', color: 'var(--muted)' }}
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--orange)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
             >
               <span style={{ color: 'var(--orange)', marginRight: 6, fontSize: 10 }}>▸</span>
-              {i.label}
+              {item.label}
             </Link>
           ))}
         </div>
@@ -111,30 +124,52 @@ function DesktopNavItem({ link, onNavigate }) {
   )
 }
 
-// Mobile accordion nav item
+/* ── Mobile accordion ─────────────────────────────────────────────────────── */
 function MobileNavItem({ link, onClose }) {
   const [open, setOpen] = useState(false)
+
   return (
     <div className="border-b" style={{ borderColor: 'var(--border)' }}>
       <button
         className="flex items-center justify-between w-full px-5 py-3.5 font-barlow font-600 uppercase tracking-wider text-sm"
         style={{ color: 'var(--text)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '0.08em' }}
-        onClick={() => link.items ? setOpen(o => !o) : onClose()}
+        onClick={() => {
+          if (link.items) {
+            setOpen(o => !o)
+          } else {
+            onClose()
+          }
+        }}
       >
-        <Link to={link.path} onClick={link.items ? e => e.preventDefault() : onClose}>
-          {link.label}
-        </Link>
+        {/* The text label — tapping the label when no sub-items navigates directly */}
+        {link.items ? (
+          <span>{link.label}</span>
+        ) : (
+          <Link to={link.path} onClick={onClose} style={{ color: 'inherit' }}>{link.label}</Link>
+        )}
         {link.items && (
-          <ChevronDown size={14} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', color: 'var(--orange)' }} />
+          <ChevronDown
+            size={14}
+            style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', color: 'var(--orange)', flexShrink: 0 }}
+          />
         )}
       </button>
 
       {open && link.items && (
         <div style={{ background: 'var(--s2)', borderTop: '1px solid var(--border)' }}>
-          {link.items.map(i => (
+          {/* Direct link to the section page */}
+          <Link
+            to={link.path}
+            onClick={onClose}
+            className="block px-6 py-2.5"
+            style={{ fontFamily: 'Rajdhani', fontSize: '14px', color: 'var(--orange)', fontWeight: 700 }}
+          >
+            ▸ View All
+          </Link>
+          {link.items.map(item => (
             <Link
-              key={i.label}
-              to={i.path}
+              key={item.label}
+              to={item.path}
               onClick={onClose}
               className="block px-6 py-2.5"
               style={{ fontFamily: 'Rajdhani', fontSize: '14px', color: 'var(--muted)' }}
@@ -142,7 +177,7 @@ function MobileNavItem({ link, onClose }) {
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
             >
               <span style={{ color: 'var(--orange)', marginRight: 6, fontSize: 10 }}>▸</span>
-              {i.label}
+              {item.label}
             </Link>
           ))}
         </div>
@@ -151,21 +186,20 @@ function MobileNavItem({ link, onClose }) {
   )
 }
 
+/* ── Main Navbar ──────────────────────────────────────────────────────────── */
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { isModerator, isLoaded, role } = useRole()
+  const { isModerator, isLoaded } = useRole()
   const { toggle: toggleTheme, isDark } = useTheme()
   const { user, isSignedIn } = useUser()
   const [refreshing, setRefreshing] = useState(false)
 
-  // Refresh session to pick up role changes from Clerk dashboard
   const refreshRole = async () => {
     setRefreshing(true)
     try { await user?.reload() } catch {}
     setTimeout(() => setRefreshing(false), 1000)
   }
 
-  // Lock body scroll when drawer open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -176,41 +210,57 @@ export default function Navbar() {
       <header
         className="sticky top-0 z-50 w-full"
         style={{
-          background: isDark ? 'rgba(10,10,15,0.96)' : 'rgba(240,242,248,0.96)',
+          background: isDark ? 'rgba(10,10,15,0.97)' : 'rgba(240,242,248,0.97)',
           backdropFilter: 'blur(14px)',
           borderBottom: '1px solid var(--border)',
+          // overflow must NOT be hidden — clips dropdown menus
+          overflow: 'visible',
         }}
       >
-        <div className="max-w-screen-2xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-screen-2xl mx-auto px-4 h-16 flex items-center justify-between gap-4" style={{ overflow: 'visible' }}>
 
-          {/* ── Logo ─────────────────────────────────────────────────── */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0">
+          {/* ── Logo / Home ── */}
+          <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
             <Crosshair
               size={28}
-              style={{ color: 'var(--orange)', filter: 'drop-shadow(0 0 6px rgba(240,132,44,0.6))' }}
+              style={{ color: 'var(--orange)', filter: 'drop-shadow(0 0 6px rgba(240,132,44,0.6))', flexShrink: 0 }}
             />
             <div className="leading-none">
-              <div className="font-orbitron font-900 text-gradient" style={{ fontSize: '17px' }}>
+              <div className="font-orbitron font-900 text-gradient" style={{ fontSize: '17px', whiteSpace: 'nowrap' }}>
                 M S GAMING
               </div>
-              <div className="font-barlow uppercase" style={{ fontSize: '9px', letterSpacing: '0.25em', color: 'var(--muted)' }}>
+              <div className="font-barlow uppercase" style={{ fontSize: '9px', letterSpacing: '0.25em', color: 'var(--muted)', whiteSpace: 'nowrap' }}>
                 PUBG Community Hub
               </div>
             </div>
           </Link>
 
-          {/* ── Desktop Nav ────────────────────────────────────────── */}
-          <nav className="hidden lg:flex items-center gap-0">
+          {/* ── Desktop Nav ── */}
+          <nav className="hidden lg:flex items-center gap-0" style={{ overflow: 'visible' }}>
+
+            {/* Explicit Home link (easy navigation) */}
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                `flex items-center gap-1 font-barlow font-600 uppercase tracking-wider py-2 px-2.5 text-sm transition-colors ${
+                  isActive ? 'text-g-orange' : 'text-g-muted hover:text-g-text'
+                }`
+              }
+              style={{ letterSpacing: '0.06em' }}
+            >
+              <Home size={13} /> Home
+            </NavLink>
+
             {NAV_LINKS.map(link => (
               <DesktopNavItem key={link.label} link={link} />
             ))}
 
-            {/* Admin link — visible to moderators+ */}
             {isLoaded && isModerator && (
               <NavLink
                 to="/admin"
                 className={({ isActive }) =>
-                  `flex items-center gap-1 font-barlow font-600 uppercase tracking-wider py-2 px-2 text-sm transition-colors ${
+                  `flex items-center gap-1 font-barlow font-600 uppercase tracking-wider py-2 px-2.5 text-sm transition-colors ${
                     isActive ? 'text-g-orange' : 'text-g-muted hover:text-g-text'
                   }`
                 }
@@ -222,32 +272,18 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* ── Right controls ─────────────────────────────────────── */}
+          {/* ── Right controls ── */}
           <div className="flex items-center gap-2 shrink-0">
-
-            {/* Theme toggle */}
-            <button
-              className="theme-toggle"
-              onClick={toggleTheme}
-              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle theme"
-            >
+            <button className="theme-toggle" onClick={toggleTheme} title={isDark ? 'Light Mode' : 'Dark Mode'}>
               {isDark ? <Sun size={15} /> : <Moon size={15} />}
             </button>
 
-            {/* Role refresh (signed-in only) */}
             {isSignedIn && (
-              <button
-                className="theme-toggle"
-                onClick={refreshRole}
-                title="Refresh roles"
-                aria-label="Refresh role"
-              >
+              <button className="theme-toggle" onClick={refreshRole} title="Refresh role">
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
               </button>
             )}
 
-            {/* Clerk auth */}
             <SignedOut>
               <SignInButton mode="modal">
                 <button type="button" className="btn btn-primary" style={{ height: '36px', paddingTop: 0, paddingBottom: 0 }}>
@@ -256,58 +292,50 @@ export default function Navbar() {
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: 'w-8 h-8 ring-2 ring-g-orange ring-offset-1',
-                  },
-                }}
-              />
+              <UserButton appearance={{ elements: { avatarBox: 'w-8 h-8 ring-2 ring-g-orange ring-offset-1' } }} />
             </SignedIn>
 
-            {/* Mobile menu button */}
-            <button
-              className="lg:hidden theme-toggle"
-              onClick={() => setMobileOpen(o => !o)}
-              aria-label="Toggle menu"
-            >
+            <button className="lg:hidden theme-toggle" onClick={() => setMobileOpen(o => !o)} aria-label="Menu">
               <Menu size={18} />
             </button>
           </div>
         </div>
       </header>
 
-      {/* ── Mobile drawer ──────────────────────────────────────────── */}
+      {/* ── Mobile drawer ── */}
       {mobileOpen && (
         <>
-          {/* Backdrop */}
-          <div className="mobile-overlay lg:hidden" onClick={() => setMobileOpen(false)} />
-
-          {/* Drawer — 40% from right */}
+          <div
+            className="mobile-overlay lg:hidden"
+            onClick={() => setMobileOpen(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 299, backdropFilter: 'blur(2px)' }}
+          />
           <div className="mobile-drawer lg:hidden">
-            {/* Drawer header */}
-            <div
-              className="flex items-center justify-between px-5 py-4"
-              style={{ borderBottom: '1px solid var(--border)', background: 'var(--s2)' }}
-            >
-              <span className="font-orbitron font-700 text-gradient" style={{ fontSize: '14px' }}>
-                MENU
-              </span>
-              <button
-                onClick={() => setMobileOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}
-              >
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid var(--border)', background: 'var(--s2)' }}>
+              <span className="font-orbitron font-700 text-gradient" style={{ fontSize: '14px' }}>MENU</span>
+              <button onClick={() => setMobileOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
                 <X size={20} />
               </button>
             </div>
 
-            {/* Nav items */}
+            {/* Home link */}
+            <div className="border-b" style={{ borderColor: 'var(--border)' }}>
+              <Link
+                to="/"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 px-5 py-3.5 font-barlow font-600 uppercase tracking-wider text-sm"
+                style={{ color: 'var(--orange)', letterSpacing: '0.08em' }}
+              >
+                <Home size={14} /> Home
+              </Link>
+            </div>
+
+            {/* Nav links */}
             <div>
               {NAV_LINKS.map(link => (
                 <MobileNavItem key={link.label} link={link} onClose={() => setMobileOpen(false)} />
               ))}
-
-              {/* Admin (mobile) */}
               {isLoaded && isModerator && (
                 <div className="border-b" style={{ borderColor: 'var(--border)' }}>
                   <Link
@@ -322,8 +350,8 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Bottom — theme + auth */}
-            <div className="p-5 mt-auto space-y-3" style={{ borderTop: '1px solid var(--border)', marginTop: 'auto' }}>
+            {/* Bottom */}
+            <div className="p-5 space-y-3" style={{ borderTop: '1px solid var(--border)', marginTop: 'auto' }}>
               <button
                 onClick={toggleTheme}
                 className="flex items-center gap-2 w-full font-barlow uppercase tracking-wider text-sm"

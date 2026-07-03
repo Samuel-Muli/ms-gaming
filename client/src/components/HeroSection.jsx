@@ -10,19 +10,20 @@ const STATS = [
 export default function HeroSection() {
   return (
     <section
-      className="relative overflow-hidden scanlines"
+      className="relative overflow-hidden scanlines hero-panel"
       style={{
         minHeight: '88vh',
-        background: 'radial-gradient(ellipse at 50% -10%, rgba(240,132,44,0.14) 0%, transparent 55%), var(--bg)',
+        background: 'radial-gradient(ellipse at 50% -10%, rgba(240,132,44,0.18) 0%, transparent 55%), radial-gradient(circle at 18% 12%, rgba(58,138,232,0.12) 0%, transparent 18%), var(--bg)',
       }}
     >
-      <div className="absolute inset-0 grid-overlay opacity-60" />
+      <div className="absolute inset-0 grid-overlay opacity-80" />
+      <div className="absolute inset-0 hero-grid-lines pointer-events-none" />
 
       {/* Glow orbs */}
-      <div className="absolute rounded-full pointer-events-none"
-        style={{ width: 600, height: 600, top: '-200px', left: '50%', transform: 'translateX(-50%)',
-          background: 'radial-gradient(circle, rgba(240,132,44,0.08) 0%, transparent 70%)',
-          animation: 'heroGlow 4s ease-in-out infinite' }} />
+      <div className="absolute rounded-full pointer-events-none glow-orb-yellow"
+        style={{ width: 520, height: 520, top: '-210px', left: '50%', transform: 'translateX(-50%)' }} />
+      <div className="absolute rounded-full pointer-events-none glow-orb-blue"
+        style={{ width: 260, height: 260, top: '14%', left: '14%' }} />
 
       {/* Corner brackets */}
       {[
@@ -46,10 +47,16 @@ export default function HeroSection() {
         </div>
 
         {/* Main heading */}
-        <h1 className="font-orbitron font-900 mb-4 animate-slide-up"
+        <h1 className="font-orbitron font-900 mb-4 animate-slide-up hero-heading"
           style={{ fontSize: 'clamp(40px, 8vw, 96px)', lineHeight: 1.0, letterSpacing: '-0.02em' }}>
           <span className="text-gradient">M S GAMING</span>
         </h1>
+
+        <div className="hero-subtitle-lines" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
 
         {/* Author */}
         <div className="flex items-center gap-2 mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>

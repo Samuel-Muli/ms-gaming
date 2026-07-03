@@ -10,11 +10,14 @@ import CommunityPost from './pages/CommunityPost'
 import Article from './pages/Article'
 import AdminDashboard from './pages/AdminDashboard'
 import NotFound from './pages/NotFound'
+import SocialPopup from './components/SocialPopup'
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        {/* Social follow popup — shown once per session, 2.5s after load */}
+        <SocialPopup />
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Home />} />
