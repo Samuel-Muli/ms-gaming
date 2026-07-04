@@ -51,16 +51,16 @@ const SOCIALS = [
 
 const NAV_COLS = {
   'PUBG Hub': [
-    { label: 'Latest Articles',   to: '/articles/pubg-season-2025' },
+    { label: 'Latest Articles',   to: '/articles/pubg-mobile-4-4-heros-crown' },
     { label: 'Upcoming Events',   to: '/upcoming-games' },
     { label: 'Strategy Guides',   to: '/community?cat=pubg-strategy' },
-    { label: 'Weapon Loadouts',   to: '/articles/best-weapon-loadouts-ranked' },
+    { label: 'Weapon Loadouts',   to: '/articles/pubg-mobile-4-4-weapon-meta' },
   ],
   'Hardware': [
     { label: 'Gaming Phones',     to: '/gaming-phones' },
     { label: 'Gaming Laptops',    to: '/laptops-consoles#laptops' },
-    { label: 'Consoles',          to: '/laptops-consoles#ps5' },
-    { label: 'PC Builds',         to: '/laptops-consoles#pc' },
+    { label: 'Consoles',          to: '/laptops-consoles#consoles' },
+    { label: 'PC Builds',         to: '/laptops-consoles#pc-builds' },
   ],
   'Community': [
     { label: 'Discussions',       to: '/community' },
@@ -182,10 +182,10 @@ export default function Footer() {
             © {new Date().getFullYear()} M S Gaming. Built &amp; operated by <span style={{ color: 'var(--gold)' }}>【M。S】</span>.
           </p>
           <div className="flex items-center gap-4 text-sm" style={{ fontFamily: 'Rajdhani', color: 'var(--muted)' }}>
-            <a href="https://pubg.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1" style={{ color: 'var(--muted)' }}
+            <a href="https://www.pubgmobile.com/en-US" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1" style={{ color: 'var(--muted)' }}
                onMouseEnter={e => (e.currentTarget.style.color = 'var(--orange)')}
                onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}>
-              PUBG Official <ExternalLink size={11} />
+              PUBG Mobile Official <ExternalLink size={11} />
             </a>
             <span>·</span>
             <span>Not affiliated with Krafton.</span>

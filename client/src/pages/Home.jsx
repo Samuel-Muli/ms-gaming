@@ -134,7 +134,7 @@ export default function Home() {
                 <Link to="/community" className="btn btn-primary">
                   Join Community <ChevronRight size={14} />
                 </Link>
-                <Link to="/articles/survival-tips-from-ms" className="btn btn-ghost">
+                <Link to="/articles/pubg-mobile-sensitivity-gyroscope-2026" className="btn btn-ghost">
                   My PUBG Tips
                 </Link>
               </div>
@@ -180,7 +180,7 @@ export default function Home() {
               label="PUBG Battlegrounds"
               color="var(--orange)"
               articles={articles}
-              link="/articles/pubg-season-2025"
+              link="/articles/pubg-mobile-4-4-heros-crown"
               defaultExpanded={true}
             />
 

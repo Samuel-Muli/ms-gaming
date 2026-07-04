@@ -82,7 +82,7 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div className="flex flex-wrap gap-3 justify-center mb-16 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <Link to="/articles/pubg-season-2025" className="btn btn-primary text-base px-7 py-3">
+          <Link to="/articles/pubg-mobile-4-4-heros-crown" className="btn btn-primary text-base px-7 py-3">
             Latest PUBG <ChevronRight size={16} />
           </Link>
           <Link to="/community" className="btn btn-ghost text-base px-7 py-3">
