@@ -11,6 +11,7 @@ const CATEGORIES = [
   { id: 'pubg-strategy', label: '⚔️ PUBG Strategy' },
   { id: 'pubg-clips',    label: '🎥 PUBG Clips' },
   { id: 'hardware',      label: '🖥️ Hardware' },
+  { id: 'card-exchange', label: '💳 Card Exchanges' },
   { id: 'events',        label: '🏆 Events' },
   { id: 'introductions', label: '👋 Introductions' },
   { id: 'general',       label: '💬 General' },
@@ -197,6 +198,7 @@ export default function Community() {
   const [page, setPage]             = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [showForm, setShowForm]     = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [form, setForm]             = useState(EMPTY_FORM)
   const [media, setMedia]           = useState([])   // uploaded media
   const [submitting, setSubmitting] = useState(false)
@@ -223,6 +225,7 @@ export default function Community() {
 
   const setCategory = (cat) => {
     setPage(1)
+    setMobileFiltersOpen(false)
     cat === 'all' ? setSearchParams({}) : setSearchParams({ cat })
   }
 
@@ -297,7 +300,7 @@ export default function Community() {
         </div>
 
         {isSignedIn ? (
-          <button className="btn btn-primary shrink-0" onClick={() => setShowForm(o => !o)}>
+          <button className="btn btn-primary shrink-0 hidden sm:inline-flex" onClick={() => setShowForm(o => !o)}>
             <Plus size={16} /> New Post
           </button>
         ) : (
@@ -309,7 +312,7 @@ export default function Community() {
 
       {/* ── New Post Form ── */}
       {showForm && (
-        <div className="gaming-card p-6 mb-8 animate-slide-up">
+        <div className="social-post-card p-6 mb-8 animate-slide-up">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-barlow font-700 text-xl uppercase tracking-wide" style={{ color: 'var(--text)' }}>
               New Post
@@ -389,31 +392,91 @@ export default function Community() {
       )}
 
       {/* ── Category filter ── */}
-      <div className="flex items-center gap-2 mb-6 flex-wrap">
-        <Filter size={13} style={{ color: 'var(--muted)', flexShrink: 0 }} />
-        {CATEGORIES.map(c => (
+      <div className="flex flex-col gap-3 mb-6">
+        <div className="flex items-center justify-between gap-3">
           <button
-            key={c.id}
-            onClick={() => setCategory(c.id)}
-            className="btn text-xs px-3 py-1.5"
-            style={{
-              background:    catParam === c.id ? 'rgba(240,132,44,0.15)' : 'transparent',
-              color:         catParam === c.id ? 'var(--orange)' : 'var(--muted)',
-              border:        `1px solid ${catParam === c.id ? 'rgba(240,132,44,0.5)' : 'var(--border)'}`,
-              fontFamily:    'Barlow Condensed',
-              letterSpacing: '0.05em',
-            }}
+            type="button"
+            className="btn btn-ghost text-xs px-3 py-1.5 flex items-center gap-2 sm:hidden"
+            onClick={() => setMobileFiltersOpen(open => !open)}
+            style={{ fontFamily: 'Barlow Condensed', letterSpacing: '0.05em' }}
           >
-            {c.label}
+            <Filter size={13} /> {mobileFiltersOpen ? 'Hide Filters' : 'Filter'}
           </button>
-        ))}
+
+          <div className="inline-flex items-center gap-2 flex-wrap">
+            <span className="badge badge-general"
+              style={{ background: 'rgba(240,132,44,0.12)', color: 'var(--orange)', borderColor: 'rgba(240,132,44,0.4)' }}>
+              {CATEGORIES.find(c => c.id === catParam)?.label || 'All Posts'}
+            </span>
+            {catParam !== 'all' && (
+              <button
+                type="button"
+                onClick={() => setCategory('all')}
+                className="btn btn-ghost text-xs px-3 py-1.5"
+                style={{ fontFamily: 'Barlow Condensed', letterSpacing: '0.05em' }}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 flex-wrap">
+          <Filter size={13} style={{ color: 'var(--muted)', flexShrink: 0 }} />
+          {CATEGORIES.map(c => (
+            <button
+              key={c.id}
+              onClick={() => setCategory(c.id)}
+              className="btn text-xs px-3 py-1.5"
+              style={{
+                background:    catParam === c.id ? 'rgba(240,132,44,0.15)' : 'transparent',
+                color:         catParam === c.id ? 'var(--orange)' : 'var(--muted)',
+                border:        `1px solid ${catParam === c.id ? 'rgba(240,132,44,0.5)' : 'var(--border)'}`,
+                fontFamily:    'Barlow Condensed',
+                letterSpacing: '0.05em',
+              }}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+
+        <div className={`mobile-filter-panel space-y-2 sm:hidden ${mobileFiltersOpen ? 'open' : ''}`}
+          aria-hidden={!mobileFiltersOpen}>
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map(c => (
+              <button
+                key={c.id}
+                onClick={() => setCategory(c.id)}
+                className="btn text-xs px-3 py-1.5"
+                style={{
+                  background:    catParam === c.id ? 'rgba(240,132,44,0.15)' : 'transparent',
+                  color:         catParam === c.id ? 'var(--orange)' : 'var(--muted)',
+                  border:        `1px solid ${catParam === c.id ? 'rgba(240,132,44,0.5)' : 'var(--border)'}`,
+                  fontFamily:    'Barlow Condensed',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => setCategory('all')}
+            className="btn btn-ghost text-xs px-3 py-1.5"
+            style={{ fontFamily: 'Barlow Condensed', letterSpacing: '0.05em' }}
+          >
+            Clear filters
+          </button>
+        </div>
       </div>
 
       {/* ── Posts list ── */}
       {loading && posts.length === 0 ? (
         <PageLoader label="Loading discussions…" />
       ) : posts.length === 0 ? (
-        <div className="text-center py-16 gaming-card">
+        <div className="text-center py-16 social-post-card">
           <MessageSquare size={40} className="mx-auto mb-4" style={{ color: 'var(--orange)', opacity: 0.4 }} />
           <p className="font-barlow uppercase tracking-wide" style={{ color: 'var(--muted)' }}>
             No posts yet in this category
@@ -442,6 +505,13 @@ export default function Community() {
             {loading ? 'Loading…' : 'Load More Posts'}
           </button>
         </div>
+      )}
+
+      {isSignedIn && (
+        <button className="new-post-floating" onClick={() => setShowForm(true)} aria-label="New Post">
+          <Plus size={18} />
+          <span>New Post</span>
+        </button>
       )}
     </div>
   )

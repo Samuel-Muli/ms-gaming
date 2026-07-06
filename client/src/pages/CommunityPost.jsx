@@ -282,7 +282,7 @@ function MediaGrid({ media }) {
 /* ── Post body: text + media side-by-side on desktop ─────────────────────── */
 function PostBody({ content, media }) {
   const hasMedia = media?.length > 0
-  const manyMedia = media?.length > 2
+  const caption = content?.trim()
 
   if (!hasMedia) {
     return (
@@ -293,38 +293,16 @@ function PostBody({ content, media }) {
     )
   }
 
-  if (manyMedia) {
-    // More than 2 media: media on top, text below
-    return (
-      <>
-        <MediaGrid media={media} />
+  return (
+    <>
+      <MediaGrid media={media} />
+      {caption && (
         <div className="whitespace-pre-wrap leading-relaxed mt-5 mb-2"
           style={{ fontFamily: 'Rajdhani', fontSize: '16px', color: 'var(--muted)' }}>
           {content}
         </div>
-      </>
-    )
-  }
-
-  // 1–2 media: text left, media right (side by side on desktop, stacked on mobile)
-  return (
-    <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 8 }}>
-      {/* Text — takes available space */}
-      <div
-        className="whitespace-pre-wrap leading-relaxed"
-        style={{
-          fontFamily: 'Rajdhani', fontSize: '16px', color: 'var(--muted)',
-          flex: '1 1 280px', minWidth: 0,
-        }}
-      >
-        {content}
-      </div>
-
-      {/* Media — fixed width column on desktop */}
-      <div style={{ flex: '0 0 min(320px, 100%)', width: 'min(320px, 100%)' }}>
-        <MediaGrid media={media} />
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 
@@ -450,65 +428,87 @@ export default function CommunityPost() {
       </Link>
 
       {/* Post */}
-      <article className="gaming-card p-6 md:p-8 mb-8">
-
-        {/* Category / pin */}
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          {post.isPinned && <span className="badge badge-pinned flex items-center gap-1"><Pin size={9} /> Pinned</span>}
-          <span className={`badge ${cat.cls}`}>{cat.label}</span>
-        </div>
-
-        <h1 className="font-barlow font-800 leading-tight mb-5"
-          style={{ fontSize: 'clamp(22px, 4vw, 36px)', color: 'var(--text)' }}>
-          {post.title}
-        </h1>
-
-        {/* Author */}
-        <div className="flex items-center gap-3 mb-6 pb-5" style={{ borderBottom: '1px solid var(--border)' }}>
-          <Avatar name={post.authorName} />
+      <article className="social-post-card p-6 md:p-8 mb-8">
+        <div className="social-post-header mb-6">
           <div>
-            <div className="font-barlow font-600" style={{ color: 'var(--gold)', fontSize: '16px' }}>{post.authorName}</div>
-            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: 'var(--muted)' }}>
-              {timeAgo(post.createdAt)}
+            <div className="social-post-badge-row">
+              {post.isPinned && <span className="social-pill">Pinned</span>}
+              <span className={`badge ${cat.cls}`}>{cat.label}</span>
+            </div>
+            <h1 className="font-barlow font-800 leading-tight mt-3"
+              style={{ fontSize: 'clamp(24px, 4vw, 38px)', color: 'var(--text)' }}>
+              {post.title}
+            </h1>
+          </div>
+          <div className="social-post-author-card">
+            <Avatar name={post.authorName} />
+            <div>
+              <div className="font-barlow font-600" style={{ color: 'var(--gold)', fontSize: '16px' }}>{post.authorName}</div>
+              <div style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: 'var(--muted)' }}>
+                {timeAgo(post.createdAt)}
+              </div>
             </div>
           </div>
-          {isModerator && (
-            <div className="ml-auto flex items-center gap-2">
-              <button onClick={pinPost} className={`btn text-xs px-3 py-1.5 ${post.isPinned ? 'btn-danger' : 'btn-ghost'}`}>
-                <Pin size={11} /> {post.isPinned ? 'Unpin' : 'Pin'}
-              </button>
-              <button onClick={deletePost} className="btn btn-danger text-xs px-3 py-1.5">
-                <Trash2 size={11} /> Delete
-              </button>
-            </div>
-          )}
         </div>
 
-        {/* Content + Media — smart layout */}
-        <PostBody content={post.content} media={post.media} />
+        <div className="social-post-grid">
+          <div>
+            <PostBody content={post.content} media={post.media} />
 
-        {/* Reactions */}
-        <div className="flex items-center gap-5 pt-5" style={{ borderTop: '1px solid var(--border)' }}>
-          <button onClick={toggleLike} disabled={!isSignedIn}
-            className="flex items-center gap-2 transition-all"
-            style={{
-              background: 'none', border: 'none',
-              cursor: isSignedIn ? 'pointer' : 'default',
-              color: liked ? 'var(--orange)' : 'var(--muted)',
-              fontFamily: 'Barlow Condensed', fontSize: '13px', letterSpacing: '0.06em',
-            }}>
-            <ThumbsUp size={16} style={{ fill: liked ? 'var(--orange)' : 'none' }} />
-            {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
-          </button>
-          <span className="flex items-center gap-2"
-            style={{ color: 'var(--muted)', fontFamily: 'Barlow Condensed', fontSize: '13px', letterSpacing: '0.06em' }}>
-            <MessageSquare size={14} style={{ color: 'var(--gold)' }} />
-            {comments.length} Comments
-          </span>
-          <span className="flex items-center gap-2"
-            style={{ color: 'var(--muted)', fontFamily: 'Barlow Condensed', fontSize: '13px', letterSpacing: '0.06em' }}>
-            <Eye size={14} /> {post.views || 0} Views
-          </span>
+            <div className="social-post-actions">
+              <button onClick={toggleLike} disabled={!isSignedIn}
+                className="social-action-button"
+                style={{ cursor: isSignedIn ? 'pointer' : 'default' }}>
+                <ThumbsUp size={16} style={{ fill: liked ? 'var(--orange)' : 'none' }} />
+                {likeCount} {likeCount === 1 ? 'Like' : 'Likes'}
+              </button>
+              <span className="social-action-pill">
+                <MessageSquare size={14} style={{ color: 'var(--gold)' }} />
+                {comments.length} Comments
+              </span>
+              <span className="social-action-pill">
+                <Eye size={14} /> {post.views || 0} Views
+              </span>
+            </div>
+          </div>
+
+          <aside className="social-post-sidebar">
+            <div className="sidebar-card sidebar-info-card">
+              <div className="sidebar-title">GAME ROOM</div>
+              <div className="sidebar-metrics">
+                <div className="sidebar-metric-item">
+                  <strong>{likeCount}</strong>
+                  <span>Likes</span>
+                </div>
+                <div className="sidebar-metric-item">
+                  <strong>{comments.length}</strong>
+                  <span>Comments</span>
+                </div>
+                <div className="sidebar-metric-item">
+                  <strong>{post.views || 0}</strong>
+                  <span>Views</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="sidebar-card sidebar-info-card">
+              <div className="sidebar-title">About this post</div>
+              <p style={{ fontFamily: 'Rajdhani', color: 'var(--muted)', fontSize: '14px', margin: 0 }}>
+                A premium community drop with gaming tips, media and player strategy.
+              </p>
+            </div>
+
+            {isModerator && (
+              <div className="sidebar-card">
+                <button onClick={pinPost} className="btn btn-ghost btn-sm mb-3">
+                  <Pin size={12} /> {post.isPinned ? 'Unpin Post' : 'Pin Post'}
+                </button>
+                <button onClick={deletePost} className="btn btn-danger btn-sm w-full">
+                  <Trash2 size={12} /> Delete Post
+                </button>
+              </div>
+            )}
+          </aside>
         </div>
       </article>
 
@@ -534,7 +534,7 @@ export default function CommunityPost() {
         )}
 
         {isSignedIn ? (
-          <div className="gaming-card p-5 mb-6">
+          <div className="gaming-card p-5 mb-6 social-comment-input">
             <div className="input-label mb-1">
               {replyTo ? `↩ Reply to ${replyTo.authorName}` : 'Add a Comment'}
             </div>
@@ -554,7 +554,7 @@ export default function CommunityPost() {
             </div>
           </div>
         ) : (
-          <div className="gaming-card p-5 mb-6 text-center">
+          <div className="gaming-card p-5 mb-6 text-center social-comment-input">
             <p style={{ fontFamily: 'Rajdhani', color: 'var(--muted)', marginBottom: 12 }}>
               Sign in to join the discussion.
             </p>
@@ -570,7 +570,7 @@ export default function CommunityPost() {
               No comments yet. Start the conversation!
             </p>
           ) : topComments.map(c => (
-            <div key={c._id} className="gaming-card p-4">
+            <div key={c._id} className="gaming-card p-4 comment-card">
               <div className="flex items-start gap-3">
                 <Avatar name={c.authorName} size={34} />
                 <div className="flex-1 min-w-0">
@@ -607,8 +607,7 @@ export default function CommunityPost() {
               </div>
 
               {getReplies(c._id).map(r => (
-                <div key={r._id} className="flex items-start gap-3 mt-3 pl-10"
-                  style={{ borderLeft: '2px solid var(--border)', marginLeft: 16 }}>
+                <div key={r._id} className="flex items-start gap-3 mt-3 pl-10 reply-card">
                   <Avatar name={r.authorName} size={28} />
                   <div className="flex-1">
                     <div className="flex items-center justify-between gap-2 mb-1">
