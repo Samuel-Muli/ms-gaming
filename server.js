@@ -359,7 +359,7 @@ app.get('/api/admin/recent-posts', requireAuth, requireMod, async (req, res) => 
 // ─── Production static ────────────────────────────────────────────────────────
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/dist')));
-  app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'client/dist/index.html')));
+  app.get('/*splat', (_req, res) => res.sendFile(path.join(__dirname, 'client/dist/index.html')));
 }
 
 // ─── Multer error handler ─────────────────────────────────────────────────────
