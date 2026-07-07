@@ -2,7 +2,7 @@
 
 A full-stack gaming media platform by **【M。S】** — PUBG Mobile news and guides, gaming hardware reviews, esports/event coverage, and a role-moderated community forum. Built with React 19 on the front end and an Express 5 + MongoDB API on the back end, with Clerk handling authentication.
 
-**Live demo:** _add your Render URL here once deployed_
+**Live demo:**[ _add your Render URL here once deployed_](https://ms-gaming.onrender.com/)
 
 ---
 
