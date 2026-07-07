@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 // ── Styles (injected once) ──
 let stylesInjected = false;
-const STYLE_ID = 'squid-game-loader-styles';
+const STYLE_ID = 'sg-loader-styles';
 
 function injectStyles() {
   if (stylesInjected || typeof document === 'undefined') return;
@@ -35,7 +35,7 @@ function injectStyles() {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: #fff;
+      background: #fff;
       top: 37px;
       left: 19px;
       transform: translate(-16px, -16px);
@@ -48,17 +48,17 @@ function injectStyles() {
       transform: translate(-10px, -18px);
       animation: sg-DotTriangle 3s cubic-bezier(0.7, 0.13, 0.15, 0.8) infinite;
     }
-    .sg-loader__svg .sg-shape-polygon {
+    .sg-shape-polygon {
       stroke-dashoffset: 0;
       stroke-dasharray: 145 76 145 76;
       animation: sg-animateTriangle 3s cubic-bezier(0.7, 0.13, 0.15, 0.8) infinite;
     }
-    .sg-loader__svg .sg-shape-rect {
+    .sg-shape-rect {
       stroke-dashoffset: 0;
       stroke-dasharray: 192 64 192 64;
       animation: sg-animateRect 3s cubic-bezier(0.7, 0.13, 0.15, 0.8) infinite;
     }
-    .sg-loader__svg .sg-shape-circle {
+    .sg-shape-circle {
       stroke-dashoffset: 75;
       stroke-dasharray: 150 50 150 50;
       animation: sg-animateCircle 3s cubic-bezier(0.7, 0.13, 0.15, 0.8) infinite;
