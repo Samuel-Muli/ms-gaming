@@ -21,7 +21,9 @@ export default function ArticleCard({ article, size = 'normal' }) {
         <div
           className={`relative overflow-hidden shrink-0 ${large ? 'md:w-80 h-52 md:h-auto' : 'h-44'}`}
           style={{
-            background: `linear-gradient(135deg, ${article.thumbColor || '#1c1c28'} 0%, #0a0a0f 100%)`,
+            background: article.thumbUrl
+              ? `linear-gradient(180deg, rgba(10,10,15,0.45), rgba(10,10,15,0.45)), url(${article.thumbUrl}) center/cover no-repeat`
+              : `linear-gradient(135deg, ${article.thumbColor || '#1c1c28'} 0%, #0a0a0f 100%)`,
           }}
         >
           {/* Grid overlay */}

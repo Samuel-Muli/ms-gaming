@@ -4,6 +4,7 @@ export const articles = [
     title: "PUBG Mobile vs PUBG PC: Which Should You Play in 2025?",
     category: "pubg",
     thumbColor: "#0d0d1a",
+    thumbUrl: "https://i.ibb.co/xtfkj7wr/Screenshot-2025-03-17-17-35-24-057-com-tencent-ig.jpg",
     thumbIcon: "📱",
     tags: ["PUBG", "Mobile", "PC", "Comparison"],
     author: "【M。S】",
