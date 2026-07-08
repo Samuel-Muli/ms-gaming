@@ -4,6 +4,7 @@ export const laptopArticles = [
     title: 'ASUS ROG Zephyrus G16 Review: PUBG at Ultra — Zero Compromise',
     category: 'laptop',
     thumbColor: '#0a0d1a',
+    
     thumbIcon: '💻',
     tags: ['ROG Zephyrus', 'Gaming Laptop', 'Review', 'PUBG PC'],
     author: '【M。S】',
