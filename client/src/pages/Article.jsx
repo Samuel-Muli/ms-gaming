@@ -166,6 +166,29 @@ export default function Article({ category }) {
         <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, var(--orange), rgba(240,132,44,0.1), transparent)' }} />
       </header>
 
+      {/* Hero image — shown when thumbUrl is set */}
+      {article.thumbUrl && (
+        <div
+          className="mb-8 overflow-hidden"
+          style={{ border: '1px solid var(--border)', position: 'relative', maxHeight: 420 }}
+        >
+          <img
+            src={article.thumbUrl}
+            alt={article.title}
+            style={{ width: '100%', maxHeight: 420, objectFit: 'cover', display: 'block' }}
+            loading="lazy"
+          />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, transparent 55%, rgba(10,10,15,0.65) 100%)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{ position: 'absolute', top: 12, left: 12 }}>
+            <span className="badge badge-pubg">{(article.category || 'pubg').toUpperCase()}</span>
+          </div>
+        </div>
+      )}
+
       {/* Two-column layout (article + mini sidebar) */}
       <div className="flex gap-8">
 

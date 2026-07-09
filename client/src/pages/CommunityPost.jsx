@@ -247,34 +247,97 @@ function MediaThumb({ item, onClick }) {
   )
 }
 
-/* ── Media grid — image top, text bottom layout ───────────────────────────── */
+/* ── Image collage — 1-4 images, Facebook-style ──────────────────────────── */
+function ImageCollage({ images, onOpen }) {
+  const n = Math.min(images.length, 4)
+  const imgs = images.slice(0, 4)
+
+  /* 1 image – full width */
+  if (n === 1) return (
+    <div style={{ borderRadius: 8, overflow: 'hidden', cursor: 'zoom-in', position: 'relative', height: 340 }}
+      onClick={() => onOpen(imgs[0])}>
+      <MediaThumb item={imgs[0]} onClick={() => onOpen(imgs[0])} />
+    </div>
+  )
+
+  /* 2 images – side by side */
+  if (n === 2) return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3, borderRadius: 8, overflow: 'hidden', height: 300 }}>
+      {imgs.map((m, i) => <MediaThumb key={i} item={m} onClick={() => onOpen(m)} />)}
+    </div>
+  )
+
+  /* 3 images – 1 large left + 2 stacked right */
+  if (n === 3) return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '150px 150px', gap: 3, borderRadius: 8, overflow: 'hidden', height: 303 }}>
+      <div style={{ gridRow: '1 / 3' }}>
+        <MediaThumb item={imgs[0]} onClick={() => onOpen(imgs[0])} />
+      </div>
+      <MediaThumb item={imgs[1]} onClick={() => onOpen(imgs[1])} />
+      <MediaThumb item={imgs[2]} onClick={() => onOpen(imgs[2])} />
+    </div>
+  )
+
+  /* 4 images – 2×2 grid */
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '150px 150px', gap: 3, borderRadius: 8, overflow: 'hidden', height: 303 }}>
+      {imgs.map((m, i) => {
+        const remaining = images.length - 4
+        return (
+          <div key={i} style={{ position: 'relative' }} onClick={() => onOpen(m)}>
+            <MediaThumb item={m} onClick={() => onOpen(m)} />
+            {/* +N overlay on last tile if more than 4 */}
+            {i === 3 && remaining > 0 && (
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'rgba(0,0,0,0.58)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'zoom-in',
+                fontFamily: 'Orbitron', fontSize: '24px', fontWeight: 900, color: '#fff',
+              }}>
+                +{remaining}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ── Media grid dispatcher ────────────────────────────────────────────────── */
 function MediaGrid({ media }) {
   const [lightbox, setLightbox] = useState(null)
   if (!media?.length) return null
 
-  const count = media.length
+  const images = media.filter(m => m.type === 'image')
+  const videos = media.filter(m => m.type === 'video')
 
   return (
     <>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: count === 1 ? '1fr' : count === 2 ? '1fr 1fr' : count === 3 ? '1fr 1fr 1fr' : 'repeat(2, 1fr)',
-          gap: 8,
-          marginTop: 16,
-          marginBottom: 4,
-        }}
-      >
-        {media.map((m, i) => (
-          <MediaThumb key={i} item={m} onClick={() => setLightbox(m)} />
-        ))}
-      </div>
-      {count > 1 && (
-        <p style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: 'var(--muted)', marginTop: 4 }}>
-          {count} attachment{count > 1 ? 's' : ''} · click to expand
-        </p>
+      {/* Image collage (up to 4 shown) */}
+      {images.length > 0 && (
+        <div style={{ marginTop: 16, marginBottom: images.length > 1 ? 4 : 8 }}>
+          <ImageCollage images={images} onOpen={setLightbox} />
+          {images.length > 1 && (
+            <p style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: 'var(--muted)', marginTop: 5 }}>
+              {images.length} image{images.length > 1 ? 's' : ''} · click to expand
+            </p>
+          )}
+        </div>
       )}
-      {lightbox && <Lightbox src={lightbox.url} type={lightbox.type} onClose={() => setLightbox(null)} />}
+
+      {/* Video (standalone, always full-width) */}
+      {videos.map((v, i) => (
+        <div key={i} style={{ marginTop: 12, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', cursor: 'pointer' }}
+          onClick={() => setLightbox(v)}>
+          <MediaThumb item={v} onClick={() => setLightbox(v)} />
+        </div>
+      ))}
+
+      {lightbox && (
+        <Lightbox src={lightbox.url} type={lightbox.type} onClose={() => setLightbox(null)} />
+      )}
     </>
   )
 }

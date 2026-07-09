@@ -56,21 +56,58 @@ function MediaUploader({ onAdded, isSuperAdmin }) {
 
   const handleFiles = async (files) => {
     const arr = Array.from(files)
+    const currentVideos = previews.filter(p => !p.error && p.type === 'video')
+    const currentImages = previews.filter(p => !p.error && p.type === 'image')
+
     for (const file of arr) {
+      const isImage = file.type.startsWith('image/')
+      const isVideo = file.type.startsWith('video/')
+
+      // Rule: can't add an image if a video is already queued
+      if (isImage && currentVideos.length > 0) {
+        setPreviews(p => [...p, { url: null, type: null, file, error: 'Remove the video first before adding images.' }])
+        continue
+      }
+
+      // Rule: can't add a video if images are already queued
+      if (isVideo && currentImages.length > 0) {
+        setPreviews(p => [...p, { url: null, type: null, file, error: 'Remove all images first before adding a video.' }])
+        continue
+      }
+
+      // Rule: only 1 video allowed
+      if (isVideo && currentVideos.length >= 1) {
+        setPreviews(p => [...p, { url: null, type: null, file, error: 'Only 1 video can be posted at a time.' }])
+        continue
+      }
+
+      // Rule: max 4 images
+      if (isImage && currentImages.length >= 4) {
+        setPreviews(p => [...p, { url: null, type: null, file, error: 'Maximum 4 images per post.' }])
+        continue
+      }
+
       const sizeErr = validate(file)
       if (sizeErr) {
         setPreviews(p => [...p, { url: null, type: null, file, error: sizeErr }])
         continue
       }
-      if (file.type.startsWith('video/') && !isSuperAdmin) {
+
+      if (isVideo && !isSuperAdmin) {
         const dur = await checkVideoDuration(file)
         if (dur !== null && dur > MAX_VIDEO_SECS) {
           setPreviews(p => [...p, { url: null, type: null, file, error: `Video must be ≤${MAX_VIDEO_SECS}s (yours: ${Math.round(dur)}s).` }])
           continue
         }
       }
+
       const url = URL.createObjectURL(file)
-      setPreviews(p => [...p, { url, type: file.type.startsWith('image/') ? 'image' : 'video', file, error: null, uploaded: false }])
+      const type = isImage ? 'image' : 'video'
+      setPreviews(p => [...p, { url, type, file, error: null, uploaded: false }])
+
+      // Update running counts to correctly block further additions in the same batch
+      if (isImage) currentImages.push({ type: 'image' })
+      if (isVideo) currentVideos.push({ type: 'video' })
     }
   }
 
@@ -126,8 +163,8 @@ function MediaUploader({ onAdded, isSuperAdmin }) {
           </p>
           <p style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: 'var(--muted)' }}>
             {isSuperAdmin
-              ? 'Images · Videos (no size limit)'
-              : `Images ≤${MAX_IMAGE_MB}MB · Videos ≤${MAX_VIDEO_MB}MB, ≤${MAX_VIDEO_SECS}s`}
+              ? 'Up to 4 images · OR 1 video (no size limit)'
+              : `Up to 4 images ≤${MAX_IMAGE_MB}MB each · OR 1 video ≤${MAX_VIDEO_MB}MB, ≤${MAX_VIDEO_SECS}s`}
           </p>
         </div>
         <input
