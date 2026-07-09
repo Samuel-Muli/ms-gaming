@@ -5,6 +5,7 @@ const NEWS_ITEMS = [
   '🔥 PUBG Season 2025 — New Rondo map updates & ranked season changes now LIVE',
   '⚡ Community Alert — 【M。S】 gaming tips series: Drop Zone Mastery is up now',
   '🎮 Gaming Phone Showdown — ROG Phone 9 vs RedMagic 10 Pro: full comparison inside',
+  '🥷 New PUBG x Naruto themed mode Season available',
   '🏆 PUBG Global Championship 2026 — Group stage results & bracket breakdown',
   '📱 Best gaming phones for PUBG Mobile in 2026 — ranked & reviewed',
   '🖥️ MSI Titan GT77 review — Can it handle PUBG at ultra settings?',
