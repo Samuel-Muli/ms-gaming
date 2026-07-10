@@ -225,6 +225,20 @@ function MediaUploader({ onAdded, isSuperAdmin }) {
   )
 }
 
+
+/* ── Delete uploaded files from server (used on cancel) ─── */
+async function deleteUploadedFiles(uploadedUrls, getToken) {
+  if (!uploadedUrls.length) return
+  try {
+    const token = await getToken()
+    await fetch('/api/uploads', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ urls: uploadedUrls }),
+    })
+  } catch {}
+}
+
 /* ── Main Page ────────────────────────────────────────────────────────────── */
 export default function Community() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -354,7 +368,13 @@ export default function Community() {
             <h3 className="font-barlow font-700 text-xl uppercase tracking-wide" style={{ color: 'var(--text)' }}>
               New Post
             </h3>
-            <button onClick={() => setShowForm(false)}
+            <button onClick={async () => {
+                const serverUrls = media.map(m => m.url).filter(Boolean)
+                setShowForm(false)
+                setMedia([])
+                setForm(EMPTY_FORM)
+                await deleteUploadedFiles(serverUrls, getToken)
+              }}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
               <X size={18} />
             </button>
@@ -418,7 +438,13 @@ export default function Community() {
             )}
 
             <div className="flex justify-end gap-3">
-              <button className="btn btn-ghost" onClick={() => { setShowForm(false); setMedia([]) }}>Cancel</button>
+              <button className="btn btn-ghost" onClick={async () => {
+                const serverUrls = media.map(m => m.url).filter(Boolean)
+                setShowForm(false)
+                setMedia([])
+                setForm(EMPTY_FORM)
+                await deleteUploadedFiles(serverUrls, getToken)
+              }}>Cancel</button>
               <button className="btn btn-primary" onClick={submitPost} disabled={submitting}>
                 <Send size={14} />
                 {submitting ? 'Posting…' : 'Post Discussion'}

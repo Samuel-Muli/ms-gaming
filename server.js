@@ -128,6 +128,25 @@ app.post('/api/upload', requireAuth, upload.single('file'), (req, res) => {
   });
 });
 
+
+// ─── DELETE UPLOADED FILES (cleanup on cancel or post delete) ────────────────
+app.delete('/api/uploads', requireAuth, async (req, res) => {
+  try {
+    const { urls } = req.body;
+    if (!Array.isArray(urls) || !urls.length) return res.json({ deleted: 0 });
+    let deleted = 0;
+    for (const url of urls) {
+      // Only delete files in our uploads dir — strip leading /uploads/
+      const filename = url.replace(/^\/uploads\//, '');
+      // Reject any path traversal attempts
+      if (filename.includes('/') || filename.includes('..') || !filename.match(/^[\w\-. ]+$/)) continue;
+      const full = path.join(UPLOADS_DIR, filename);
+      if (fs.existsSync(full)) { fs.unlinkSync(full); deleted++; }
+    }
+    res.json({ deleted });
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
+});
+
 // ─── COMMUNITY POSTS ─────────────────────────────────────────────────────────
 app.get('/api/posts', async (req, res) => {
   try {
@@ -212,6 +231,17 @@ app.delete('/api/posts/:id', requireAuth, async (req, res) => {
     if (!post) return res.status(404).json({ error: 'Not found' });
     const canDelete = post.authorId === req.userId || ['moderator','admin','superadmin'].includes(req.userRole);
     if (!canDelete) return res.status(403).json({ error: 'Forbidden' });
+    // Hard-delete media files from disk before marking post deleted
+    const mediaFiles = post.media || [];
+    for (const m of mediaFiles) {
+      if (m.url) {
+        const filename = m.url.replace(/^\/uploads\//, '');
+        if (filename && !filename.includes('/') && !filename.includes('..')) {
+          const full = path.join(UPLOADS_DIR, filename);
+          if (fs.existsSync(full)) { try { fs.unlinkSync(full); } catch {} }
+        }
+      }
+    }
     await db.collection('posts').updateOne({ _id: new ObjectId(req.params.id) }, { $set: { isDeleted: true } });
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: 'Server error' }); }
@@ -344,7 +374,10 @@ app.post('/api/admin/set-role', requireAuth, requireAdmin, async (req, res) => {
     if (userId === req.userId && targetRole === 'superadmin' && role !== 'superadmin')
       return res.status(400).json({ error: 'Cannot demote your own Super Admin account' });
 
-    await clerk.users.updateUserMetadata(userId, { publicMetadata: { role } });
+    const { note = '' } = req.body;
+    await clerk.users.updateUserMetadata(userId, {
+      publicMetadata: { role, roleChangedAt: new Date().toISOString(), roleNote: note.slice(0, 200) }
+    });
     res.json({ success: true, message: `Role set to "${role}"` });
   } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
 });

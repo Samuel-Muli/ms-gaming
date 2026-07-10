@@ -1295,3 +1295,148 @@ select.input { cursor: pointer; }
    CLERK OVERRIDES
 ═══════════════════════════════════════════════════════════════════════════ */
 .cl-userButtonBox { scale: 0.9; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARD & ARTICLE ANIMATIONS
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* Card entrance — staggered fade+lift */
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+.card-reveal {
+  animation: cardReveal 0.42s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* Article card hover shimmer */
+@keyframes shimmerSweep {
+  0%   { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%)  skewX(-15deg); }
+}
+
+/* Gaming border glow pulse */
+@keyframes borderPulse {
+  0%,100% { box-shadow: 0 0 0 1px rgba(240,132,44,0.15), 0 4px 16px rgba(0,0,0,0.2); }
+  50%     { box-shadow: 0 0 0 2px rgba(240,132,44,0.4),  0 6px 28px rgba(240,132,44,0.2); }
+}
+
+/* ArticleCard — enhanced hover */
+.article-card-wrap {
+  transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.28s ease,
+              border-color 0.28s ease;
+  will-change: transform;
+}
+.article-card-wrap:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: 0 12px 36px rgba(240,132,44,0.18), 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Featured article card — bigger lift + glow */
+.article-card-featured {
+  animation: borderPulse 3s ease-in-out infinite;
+}
+.article-card-featured:hover {
+  transform: translateY(-6px) scale(1.015) !important;
+  box-shadow: 0 16px 44px rgba(240,132,44,0.28), 0 4px 12px rgba(0,0,0,0.35) !important;
+}
+
+/* Shimmer overlay on hover */
+.article-thumb-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.article-thumb-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transform: translateX(-120%) skewX(-15deg);
+  pointer-events: none;
+  transition: none;
+}
+.article-thumb-shimmer:hover::after {
+  animation: shimmerSweep 0.6s ease forwards;
+}
+
+/* Article card image zoom */
+.article-thumb-img {
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.article-card-wrap:hover .article-thumb-img {
+  transform: scale(1.06);
+}
+
+/* PostCard glow */
+.post-card-glow {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.post-card-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 2px rgba(240,132,44,0.35), 0 8px 28px rgba(240,132,44,0.18) !important;
+  border-color: rgba(240,132,44,0.5) !important;
+}
+
+/* Event card */
+.event-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 2px rgba(200,160,68,0.4), 0 10px 30px rgba(200,160,68,0.15);
+}
+
+/* Home first-section featured badge */
+@keyframes featuredBadgePop {
+  0%   { transform: scale(0.8) rotate(-3deg); opacity: 0; }
+  60%  { transform: scale(1.1) rotate(1deg);  opacity: 1; }
+  100% { transform: scale(1)   rotate(0deg);  opacity: 1; }
+}
+.badge-featured {
+  animation: featuredBadgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  color: #0a0a0f;
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  border: none;
+}
+
+/* ── "Most Interacted" section in Home — distinct glow ring ── */
+.home-featured-group {
+  position: relative;
+}
+.home-featured-group::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(240,132,44,0.3) 0%, rgba(200,160,68,0.2) 50%, rgba(240,132,44,0.1) 100%);
+  z-index: -1;
+  animation: borderPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Smooth page transitions ── */
+.page-enter {
+  animation: fadeIn 0.35s ease both;
+}
+
+/* ── Collapsible group expand transition ── */
+@keyframes expandDown {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 2000px; }
+}
+.group-expand {
+  animation: expandDown 0.35s ease both;
+  overflow: hidden;
+}
+
+/* ── Drawer animation already defined, drawerSlideIn in Navbar ── */
+

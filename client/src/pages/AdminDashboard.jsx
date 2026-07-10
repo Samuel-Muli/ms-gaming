@@ -49,12 +49,17 @@ function RolePicker({ user, currentUserRole, onChanged }) {
     setOpen(false)
     setLoading(true)
     setMsg('')
+    // Prompt for optional reason note (max 200 chars)
+    const note = window.prompt(
+      `Set role to "${role}" for ${user.firstName || user.email}\n\nOptional: enter a reason (shown to the user):`
+    )
+    if (note === null) { setLoading(false); return } // user cancelled prompt
     try {
       const token = await getToken()
       const res = await fetch('/api/admin/set-role', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ userId: user.id, role }),
+        body: JSON.stringify({ userId: user.id, role, note: note.trim() }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)

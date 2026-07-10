@@ -97,8 +97,8 @@ function ArticleGroup({ icon: Icon, label, color, allArticles, categoryLink, vie
           {/* Desktop grid (sm+): up to 4 cols, show all 8 */}
           <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {displayed.map((a, i) => (
-              <div key={a.slug} className="animate-slide-up" style={{ animationDelay: `${i * 0.04}s` }}>
-                <ArticleCard article={a} />
+              <div key={a.slug} className="card-reveal" style={{ animationDelay: `${i * 0.05}s` }}>
+                <ArticleCard article={a} highlight={!!a.featured} />
               </div>
             ))}
           </div>
@@ -106,8 +106,8 @@ function ArticleGroup({ icon: Icon, label, color, allArticles, categoryLink, vie
           {/* Mobile: 1 column, initially 2, "See more" expands */}
           <div className="sm:hidden grid grid-cols-1 gap-4">
             {mobileVisible.map((a, i) => (
-              <div key={a.slug} className="animate-slide-up" style={{ animationDelay: `${i * 0.04}s` }}>
-                <ArticleCard article={a} />
+              <div key={a.slug} className="card-reveal" style={{ animationDelay: `${i * 0.05}s` }}>
+                <ArticleCard article={a} highlight={!!a.featured} />
               </div>
             ))}
           </div>
@@ -136,7 +136,7 @@ function ArticleGroup({ icon: Icon, label, color, allArticles, categoryLink, vie
           {viewAllLink && (
             <div className="text-center mt-5">
               <Link to={viewAllLink} className="btn btn-ghost text-sm" style={{ color }}>
-                Browse all {label} <ChevronRight size={13} />
+                Browse all {label} articles <ChevronRight size={13} />
               </Link>
             </div>
           )}
@@ -158,8 +158,12 @@ export default function Home() {
         <section>
           <SectionHeader icon={Gamepad2} label="Meet the Founder" />
           <div
-            className="gaming-card p-5 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8"
-            style={{ background: 'linear-gradient(135deg, rgba(240,132,44,0.04), rgba(200,160,68,0.02))' }}
+            className="gaming-card home-featured-group p-5 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8"
+            style={{
+              background: 'linear-gradient(135deg, rgba(240,132,44,0.06), rgba(200,160,68,0.03))',
+              borderColor: 'rgba(240,132,44,0.35)',
+              boxShadow: '0 0 32px rgba(240,132,44,0.12), 0 4px 20px rgba(0,0,0,0.2)',
+            }}
           >
             <div className="shrink-0 flex justify-center">
               <PlayerCard />
@@ -200,7 +204,7 @@ export default function Home() {
               const status = STATUS_COLORS[ev.status] || STATUS_COLORS.upcoming
               return (
                 <Link key={ev.slug} to={`/upcoming-games/${ev.slug}`} className="block group">
-                  <div className="gaming-card gold-card p-4 h-full" style={{ minHeight: 130 }}>
+                  <div className="gaming-card gold-card event-card p-4 h-full" style={{ minHeight: 130 }}>
                     <div className="flex items-start justify-between gap-2 mb-3">
                       <span style={{ fontSize: 26 }}>{ev.thumbIcon}</span>
                       <span className={`badge ${status.cls}`}>{status.label}</span>
@@ -229,7 +233,7 @@ export default function Home() {
               label="PUBG Battlegrounds"
               color="var(--orange)"
               allArticles={articles}
-              viewAllLink="/articles/pubg-mobile-4-4-heros-crown"
+              viewAllLink="/pubg-articles"
             />
             <ArticleGroup
               icon={Smartphone}
