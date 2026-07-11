@@ -1,5 +1,210 @@
 export const articles = [
   {
+    slug: "pubg-mobile-4-5-naruto-ninjas-assemble",
+    title: "PUBG Mobile 4.5: NARUTO Ninjas Assemble Brings the Hidden Leaf Village to Erangel",
+    category: "pubg",
+    thumbColor: "#1a0d05",
+    thumbUrl: "https://i.ibb.co/0K7Z6k9/pubg-mobile-4-5-naruto-ninjas-assemble.webp",
+    thumbIcon: "🍥",
+    tags: ["PUBG Mobile", "NARUTO Shippuden", "Update 4.5", "Ninjas Assemble"],
+    author: "【M。S】",
+    publishedAt: "2026-07-09",
+    readTime: 9,
+    featured: true,
+    excerpt:
+      "Version 4.5 is PUBG Mobile's biggest crossover yet — Hidden Leaf Village lands on Erangel, Ninjutsu scrolls change how you fight, and Kurama the Nine-Tails is waiting to wreck your squad. Here's everything in the update.",
+    content: [
+      {
+        type: "paragraph",
+        text: "PUBG Mobile's Version 4.5 update went live July 9 and it's not exaggerating to call it the biggest collaboration the game has run. NARUTO: Ninjas Assemble rebuilds a chunk of Erangel around the Hidden Leaf Village, layers an entirely new Chakra-powered ability system on top of standard gunplay, and introduces Kurama — one of the toughest PvE encounters PUBG Mobile has shipped. The themed mode runs from July 9 through September 7, so there's a full season to actually get good at it.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Hidden Leaf Village Lands North of Rozhok",
+      },
+      {
+        type: "paragraph",
+        text: "The new hot drop sits north of Rozhok on Erangel and it's a faithful recreation, not a loose reskin. You'll recognize the Hokage Rock, Naruto's Apartment, and the Hokage's Residence the moment you land, alongside the Academy, the Hidden Leaf Hospital, Training Ground Three, the Ichiraku Ramen Shop, and the Aviary. It's built as the tier-one loot zone for this season, with elevated armor drop rates and guaranteed vehicle spawns.",
+      },
+      {
+        type: "list",
+        items: [
+          "Hokage Rock and the Sakura Tree anchor the village's central skyline and are visible from the plane",
+          "The Academy and Training Ground Three are dense, multi-room structures well suited to close-range Jutsu fighting",
+          "Ichiraku Ramen Shop doubles as a resource stop — themed consumables here restore Chakra instantly",
+          "The mode is supported across Erangel, Livik, and Sanhok, though Erangel is the only map with the full themed experience",
+        ],
+      },
+      {
+        type: "warning",
+        text: "Konoha's loot quality makes it a magnet for early aggression. Expect a genuine fight for the village the moment you land — this isn't a zone to casually explore solo.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Chakra System and Ninja Run",
+      },
+      {
+        type: "paragraph",
+        text: "Every Jutsu and mobility ability in the themed mode draws from a new Chakra meter that recovers slowly on its own and instantly refills when you eat Ichiraku Ramen. Once your Chakra sits above roughly half, you unlock Ninja Run — a passive movement buff that boosts jump height, lets you sprint silently, and, most strikingly, lets you run directly across open water without swimming.",
+      },
+      {
+        type: "tip",
+        text: "Keep an eye on your Chakra bar before committing to a fight. Popping into a firefight with an empty meter means no Substitution Jutsu safety net and no Ninja Run mobility to disengage if it goes wrong.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Jutsu Scrolls: How Unlocks Roll Out",
+      },
+      {
+        type: "paragraph",
+        text: "Rather than dumping every ability at once, Ninjutsu unlocks in phases between July 9 and July 14. Earth Style: Mud Wall, Fire Style: Great Fireball Jutsu, and Reanimation Jutsu were available at launch, with Rasengan and Chidori arriving July 12 and Flying Raijin Jutsu following on July 14. Each ability is found as a physical scroll scattered around the map — walk up and interact to claim and equip it on the spot.",
+      },
+      {
+        type: "list",
+        items: [
+          "Mud Wall — instant defensive cover, best for late-game positioning or blocking a doorway push",
+          "Great Fireball Jutsu — chargeable AoE projectile that leaves a burning ground pool on impact",
+          "Rasengan — close-range AoE burst with knockback, strong against compounds and vehicles",
+          "Chidori — a fast forward dash that pierces armor, built for single-target burst",
+          "Flying Raijin Jutsu — throw a kunai and teleport to its landing spot, the best repositioning tool in the mode",
+          "Shadow Clone Jutsu — spawns a decoy you can teleport to, useful for baiting shots or a quick escape",
+          "Reanimation Jutsu — a portable teammate recall, usable while normal recall towers are still active",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Kurama: The Nine-Tails World Boss",
+      },
+      {
+        type: "paragraph",
+        text: "The mode's headline PvE encounter is Kurama, a massive Nine-Tails fox that spawns at one of three fixed points on the map each match. It's genuinely difficult — enough that it deserves its own dedicated breakdown, which you'll find in our companion trials guide. For now, know that beating it is the only way to earn the Tailed Beast Transformation, and that it takes real squad coordination, not a solo detour.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Beyond Naruto: Metro Royale, WOW, and a Ferrari Tease",
+      },
+      {
+        type: "paragraph",
+        text: "The Naruto content headlines 4.5, but it isn't the whole update. Metro Royale Chapter 33 ships with its own NARUTO-inspired encounters and seasonal rewards, World of Wonder gains dedicated Hidden Leaf Village and Valley of the End creator templates plus full NARUTO asset integration, and Home Mode adds the Seashell Bay style along with Home Competitions. A Scuderia Ferrari HP collaboration is also teased for July 10, with a Spider-Man: Brand New Day tie-in expected to follow later in the update cycle.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Final Verdict from 【M。S】",
+      },
+      {
+        type: "paragraph",
+        text: "This is what a collaboration should look like — a real map footprint, a genuinely new combat layer in the Chakra system, and a boss fight with enough teeth that it's worth practicing instead of ignoring. Update, hunt your first scroll, and go see the village for yourself before it inevitably gets contested into a crater.",
+      },
+    ],
+  },
+  {
+    slug: "pubg-mobile-naruto-trials-nine-tails-guide",
+    title: "How to Beat Every Trial in NARUTO: Ninjas Assemble (And Survive Kurama, the Nine-Tails)",
+    category: "pubg",
+    thumbColor: "#140d1a",
+    thumbUrl: "",
+    thumbIcon: "🦊",
+    tags: ["PUBG Mobile", "NARUTO Shippuden", "Nine-Tails", "Trials", "Guide"],
+    author: "【M。S】",
+    publishedAt: "2026-07-15",
+    readTime: 9,
+    featured: true,
+    excerpt:
+      "Rogue ninja camps are a warm-up. The Chunin Exam Finals Arena is a real test. Kurama the Nine-Tails is a different problem entirely. Here's how to clear every trial in Ninjas Assemble without wiping your squad.",
+    content: [
+      {
+        type: "paragraph",
+        text: "NARUTO: Ninjas Assemble isn't one encounter, it's a difficulty ladder. Rogue ninja camps teach you the Jutsu basics, the Chunin Exam Finals Arena tests your timing against another squad, and Kurama tests whether your team can actually execute under pressure. Here's how to clear each one, and why the Nine-Tails deserves to be treated as the real final boss of the season.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Warm-Up: Rogue Ninja and White Zetsu Camps",
+      },
+      {
+        type: "paragraph",
+        text: "Scattered around the Hidden Leaf Village and its surrounding zones are smaller NPC camps — rogue ninjas and Akatsuki White Zetsu clones — that aggro on sight and throw shuriken or basic Jutsu at anyone passing through. They're not meant to wall you off, just to punish careless routing. Clear them from range where you can, since they hit harder up close than their size suggests.",
+      },
+      {
+        type: "tip",
+        text: "Use these camps to farm your first Jutsu scrolls safely before pushing toward higher-contest zones. They're the lowest-risk place in the mode to actually learn a new ability's timing.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Chunin Exam Finals Arena: Voice-Activated Duels",
+      },
+      {
+        type: "paragraph",
+        text: "Starting July 14, the Chunin Exam Finals Arena adds a genuinely novel wrinkle — timed Ninjutsu Duels where you activate your technique by saying its name out loud, using voice recognition in supported languages. It's a 1v1-style skill test layered on top of the arena's own combat, and it rewards players who've actually memorized their Jutsu names instead of just tapping icons on reflex.",
+      },
+      {
+        type: "warning",
+        text: "Voice activation has a brief recognition delay. Don't wait until you're already taking damage to call out a technique — start the callout the moment you commit to using it, not after the enemy is already on top of you.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Real Test: Kurama, the Nine-Tails",
+      },
+      {
+        type: "paragraph",
+        text: "Kurama spawns at one of three fixed points on the map each match — you won't see the exact location on your minimap, so you'll need to scout each one. Once you're in its vicinity, it locks onto your squad and keeps attacking until you disengage or go down, and your screen will show how many combatants are currently fighting it so you know if you're walking into a crowded fight or a quiet one.",
+      },
+      {
+        type: "list",
+        items: [
+          "Kurama has three passive states before engagement — active, raging, or sleeping — which affect how aggressively it reacts when you approach",
+          "The fight runs in two phases: reduce it to roughly 80% health and it temporarily flees, giving your squad a window to loot and regroup",
+          "Phase two brings it back stronger, with its weak points glowing once it enters Berserk mode — that's your cue to focus fire with Jutsus for bonus damage",
+          "It periodically fires Tailed Beast Balls (Bijudama) — these need to be dodged, not tanked, since they hit hard enough to knock a player outright",
+          "Defeating it drops Chakra, airdrop-tier supplies, and a chance at the rare Reanimation Jutsu",
+        ],
+      },
+      {
+        type: "warning",
+        text: "Never approach Kurama solo. It locks onto whoever gets close and won't let up, and a lone player has no realistic path to both surviving its attacks and outputting enough damage to reach phase two.",
+      },
+      {
+        type: "tip",
+        text: "Combine your Jutsus instead of using them in isolation. Mud Wall for instant cover between Bijudama volleys, then a Rasengan or Chidori rush once it's exposed, gets far more value than spamming one ability on cooldown. Save Flying Raijin as your emergency reposition if you get caught in the open during a Berserk-phase attack.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "One Death Isn't the End",
+      },
+      {
+        type: "paragraph",
+        text: "If you go down fighting near Kurama, you get a free respawn rather than being fully eliminated — which changes the risk calculation considerably. It's still worth playing carefully, since a wipe mid-fight costs your squad tempo and lets a third-party team clean up the reward, but a single mistimed dodge doesn't have to end your attempt.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The July 17 Hidden Leaf Village Invasion",
+      },
+      {
+        type: "paragraph",
+        text: "Starting July 17, a special server-wide event can trigger randomly where a berserk Kurama attacks the Hidden Leaf Village directly. Friendly fire is disabled inside the designated raid zone for this event, and every squad currently in the lobby is expected to cooperate against the timer rather than fight each other. Winning unlocks a hidden achievement and records your performance on the leaderboard — worth chasing if you see the prompt trigger.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Final Verdict from 【M。S】",
+      },
+      {
+        type: "paragraph",
+        text: "Treat the camps and the arena as practice, because Kurama is where this season actually separates squads. Go in full strength, respect the two-phase structure, dodge instead of tank the Bijudama, and combine your Jutsus with intent instead of button-mashing. Beat it once and the airdrop-tier payout makes clear why it's the toughest fight PUBG Mobile has shipped in a while.",
+      },
+    ],
+  },
+  {
     slug: "pubg-mobile-vs-pc",
     title: "PUBG Mobile vs PUBG PC: Which Should You Play in 2025?",
     category: "pubg",
