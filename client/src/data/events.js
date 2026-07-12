@@ -10,12 +10,12 @@ export const events = [
     publishedAt: "2026-06-29",
     readTime: 5,
     featured: true,
-    status: "ongoing",
+    status: "past",
     date: "Jun 29 – Jul 5, 2026",
     location: "Studio City, Macau",
     prizePool: "$427,000",
     excerpt:
-      "25 of PUBG Mobile's top international squads — including PEL powerhouses and reigning world champions Alpha7 Esports — battle it out in Macau for the invitational title.",
+      "South Korea's Nongshim RedForce clinched the title in Macau on the final day of Smash Rule, edging out overall points leader Furia to close out one of the heaviest-hitting invitationals of the year.",
     content: [
       {
         type: "paragraph",
@@ -41,6 +41,11 @@ export const events = [
       {
         type: "paragraph",
         text: "Matches are streamed live on PUBG Mobile Esports' official YouTube channel, with several teams' matches also co-streamed on Twitch and Kick. Many of the squads competing here are using Macau as a live-fire tune-up ahead of the PUBG Mobile World Cup in Paris this August.",
+      },
+      { type: "heading", level: 2, text: "Result" },
+      {
+        type: "paragraph",
+        text: "Nongshim RedForce closed out the Grand Finals with 145 points, 98 eliminations, and two Chicken Dinners across 18 matches, securing the $147,295 top prize by winning the deciding game once Smash Rule kicked in. Brazil's Furia actually finished with the higher overall points total — 146, with a Chicken Dinner of their own — but sat out the Match Point threshold once it was reached and ended up runner-up as a result. It's a sharp reminder of how the Smash Rule format can flip a standings lead into second place on the final day.",
       },
     ],
   },
@@ -147,8 +152,8 @@ export const events = [
     publishedAt: "2026-05-16",
     readTime: 6,
     featured: false,
-    status: "ongoing",
-    date: "Runs through July 7, 2026",
+    status: "past",
+    date: "Ran through July 7, 2026",
     location: "All Servers",
     prizePool: null,
     excerpt:
@@ -185,7 +190,169 @@ export const events = [
       { type: "heading", level: 2, text: "Final Verdict from 【M。S】" },
       {
         type: "paragraph",
-        text: "4.4 is a genuinely dense update — between the AESPA collab, a new ranked season, and a steady drip of crates, there's rarely a week without something new to log in for. Grab the Royale Pass A19 track early if you're chasing the Scorpion finish, and keep an eye on official channels rather than the leak calendars for anything you're planning your wallet around.",
+        text: "4.4 is a genuinely dense update — between the AESPA collab, a new ranked season, and a steady drip of crates, there's rarely a week without something new to log in for. Grab the Royale Pass A19 track early if you're chasing the Scorpion finish, and keep an eye on official channels rather than the leak calendars for anything you're planning your wallet around. Update: 4.4 has since wrapped — see our Version 4.5 roundup below for what replaced it.",
+      },
+    ],
+  },
+  {
+    slug: "pubg-mobile-4-5-naruto-collaboration-hub",
+    title: "PUBG Mobile 4.5: NARUTO Shippuden Collaboration, Prize Path, Lucky Spin, and the Gilt Set",
+    category: "event",
+    thumbColor: "#1a0a05",
+    thumbIcon: "🥷",
+    tags: ["PUBG Mobile", "NARUTO Shippuden", "Update 4.5", "Prize Path"],
+    author: "【M。S】",
+    publishedAt: "2026-07-09",
+    readTime: 7,
+    featured: true,
+    status: "ongoing",
+    date: "Jul 9 – Sep 7, 2026",
+    location: "All Servers",
+    prizePool: null,
+    excerpt:
+      "PUBG Mobile's biggest crossover yet is live — the Hidden Leaf Village on Erangel, a Chakra-powered combat system, and Kurama the Nine-Tails, backed by a stacked Prize Path, a Lucky Spin, the first-ever NARUTO Gilt Set, and the new Druvaen X-Suit.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Version 4.5 went live globally on July 9, and Tencent and KRAFTON are calling the NARUTO SHIPPUDEN collaboration one of the most ambitious crossovers PUBG Mobile has run, developed under supervision from the NARUTO Anime Production Committee. The themed mode, NARUTO: Ninjas Assemble, runs on Erangel, Livik, and Sanhok through September 7, and it's paired with a genuinely dense rollout of paid and free reward tracks.",
+      },
+      { type: "heading", level: 2, text: "The Collaboration: Hidden Leaf Village and Kurama" },
+      {
+        type: "paragraph",
+        text: "The Hidden Leaf Village is rebuilt north of Rozhok on Erangel, complete with Hokage Rock, the Ninja Academy, and the Chunin Exam Finals Arena, where voice-activated Jutsu casting went live July 14. Kurama, the Nine-Tails, roams the map in one of three states — slumbering, prowling, or alert — and from July 17 onward a special server event can trigger where every squad in the lobby has to cooperate to defend the village from a berserk version of the fox.",
+      },
+      { type: "heading", level: 2, text: "Prize Path and Lucky Spin" },
+      {
+        type: "paragraph",
+        text: "The Naruto Prize Path is the collaboration's main progression track — unlock the premium line with UC, then earn points through daily play, missions, and event tasks to work toward character sets for Naruto, Sasuke, Sakura, Kakashi, Hinata, Gaara, Tsunade, Madara, and Jiraiya. Reports on the premium unlock cost vary between roughly 600 and 900 UC depending on the source, so treat the exact figure as unconfirmed until it's live on your server. The rarest cosmetics, including premium weapon finishes, sit behind a separate Lucky Spin gacha wheel rather than the guaranteed Prize Path track.",
+      },
+      {
+        type: "tip",
+        text: "Clear the free Prize Path track first — PUBG Mobile is calling this its largest free-rewards event yet, with north of $600 in unlockable content including a themed lobby background, the Naruto Main Theme BGM, and a Choice Chest letting you pick between the Akatsuki, Elite Hidden Leaf Ninja, or Konoha Anbu sets, all before you spend a single UC on the premium path.",
+      },
+      { type: "heading", level: 2, text: "The Gilt Set and Druvaen X-Suit" },
+      {
+        type: "paragraph",
+        text: "The paid shop layer opened July 12 with the first-ever NARUTO Gilt Set — a Naruto outfit built around Sage Mode and Six Paths Sage Mode with form-switching between the two, paired with a dual-form, level-upgradable AUG skin whose final form is themed after the Nine-Tails. Alongside it, the Druvaen X-Suit is PUBG Mobile's first X-Suit built around three separate upgradable forms rather than one, each themed to a different RGB color, paired with an upgradable M1014 skin.",
+      },
+      {
+        type: "warning",
+        text: "Exact shop dates for individual premium items have shifted across official previews and community coverage — some sources place the Druvaen X-Suit at launch, others later in the shop rotation. Check the in-game Shop Perks calendar before budgeting UC around a specific release day.",
+      },
+      { type: "heading", level: 2, text: "What Else Is Coming: Ferrari and Royale Pass A20" },
+      {
+        type: "list",
+        items: [
+          "Scuderia Ferrari HP collaboration — confirmed for July 10, bringing supercar vehicle skins and a roulette-style event, with full details still to be revealed",
+          "Royale Pass A20 — launches July 16 through September 11 on a summer and ocean theme, headlined by the Wavesong Sprite Set and an upgradable KAR98K",
+          "Metro Royale Chapter 33 — ships with its own NARUTO-inspired encounters and seasonal rewards",
+          "World of Wonder — gains dedicated Hidden Leaf Village and Valley of the End creator templates plus full NARUTO asset integration",
+        ],
+      },
+      { type: "heading", level: 2, text: "Final Verdict from 【M。S】" },
+      {
+        type: "paragraph",
+        text: "This is a genuine event, not a reskin — the map footprint, the Chakra combat layer, and the reward density here are a step up even from PUBG Mobile's usual collaboration standard. If you only engage with one track, clear the free Prize Path rewards during launch week; everything past that is worth budgeting for individually rather than spending blind on day one.",
+      },
+    ],
+  },
+  {
+    slug: "pubg-mobile-esports-nations-cup-2026-qualifiers",
+    title: "PUBG Mobile at the Esports Nations Cup 2026: Regional Qualifiers Underway",
+    category: "event",
+    thumbColor: "#14100a",
+    thumbIcon: "🌐",
+    tags: ["Esports Nations Cup", "PUBG Mobile", "Qualifiers", "Esports"],
+    author: "【M。S】",
+    publishedAt: "2026-07-10",
+    readTime: 5,
+    featured: true,
+    status: "ongoing",
+    date: "Jul 10–12, 2026 (Qualifiers) · Nov 3–8, 2026 (Main Event)",
+    location: "Online Regional Qualifiers → Riyadh, Saudi Arabia",
+    prizePool: "$1,320,000 (Main Event)",
+    excerpt:
+      "PUBG Mobile joins the inaugural Esports Nations Cup, where players compete under their country's flag instead of a club jersey. Regional qualifiers are running now across multiple continents, feeding into a 32-team, $1.32 million main event in Riyadh this November.",
+    content: [
+      {
+        type: "paragraph",
+        text: "The Esports Nations Cup is a new country-based series from the Esports World Cup Foundation, and it's a genuinely different format from PUBG Mobile's usual club-based circuit — rosters compete representing their nation rather than an org. The PUBG Mobile main event runs November 3–8 in Riyadh with a $1,320,000 prize pool across 32 teams, and the path to get there is playing out online right now.",
+      },
+      { type: "heading", level: 2, text: "How the 32 Slots Break Down" },
+      {
+        type: "list",
+        items: [
+          "12 teams invited directly via the ENC Ranking system, which aggregates player points from PMWC, PMGC, and PMGO placements through a July 5 cutoff",
+          "4 additional special invites on top of the ranking-based slots",
+          "14 slots awarded through regional online qualifiers running July 10–12 across multiple continents",
+          "2 final slots awarded via Wildcard, including a Host Region slot and a Solidarity slot for countries that haven't already qualified elsewhere",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The regional qualifiers span groupings including Southeast Asia & Oceania, East & South Asia, Europe East & Central Asia, MENA, EU West, North & Central America, South America, and both Central & West Africa and Southern & East Africa — meaning national teams from a genuinely global spread of countries are locking in their Riyadh spots this weekend.",
+      },
+      { type: "heading", level: 2, text: "Format at the Main Event" },
+      {
+        type: "paragraph",
+        text: "32 national teams split into four groups of eight for a round-robin Group Stage, November 3–5, with the top four from each group advancing to a 16-team Grand Finals. The finals run through November 6–8 across up to 18 matches, with the Smash Rule format deciding the champion on the closing day once a team crosses the Match Point threshold.",
+      },
+      {
+        type: "tip",
+        text: "Watch the qualifier standings for smaller PUBG Mobile regions you don't normally see on the international stage — the country-flag format means a nation that's never fielded a club team at a PMGC or PMWC can still punch a Riyadh ticket through its regional qualifier.",
+      },
+      { type: "heading", level: 2, text: "How to Watch" },
+      {
+        type: "paragraph",
+        text: "Qualifier matches are streaming live through PUBG Mobile Esports' regional channels as each group plays out. The November main event will carry a full broadcast as part of the wider Esports Nations Cup program in Riyadh.",
+      },
+    ],
+  },
+  {
+    slug: "pubg-mobile-national-championship-fall-2026",
+    title: "PUBG Mobile National Championship: The Fall 2026 Season Kicks Off Region by Region",
+    category: "event",
+    thumbColor: "#0a1410",
+    thumbIcon: "🏅",
+    tags: ["PMNC", "PUBG Mobile", "National Championship", "Esports"],
+    author: "【M。S】",
+    publishedAt: "2026-07-12",
+    readTime: 5,
+    featured: false,
+    status: "upcoming",
+    date: "Aug–Oct 2026 (dates vary by region)",
+    location: "Multiple Countries",
+    prizePool: null,
+    excerpt:
+      "PUBG Mobile's grassroots-to-pro pathway returns for its Fall season, with more than 30 National Championship events scheduled across eight-plus regions — the same ladder that fed Season 1 talent straight into PMGO and the World Cup.",
+    content: [
+      {
+        type: "paragraph",
+        text: "The PUBG Mobile National Championship (PMNC) series is the entry point of the game's competitive ladder — country-specific qualifiers that feed winners upward into regional pro leagues like PMPL and PMCL, and from there into PMGO and Global Championship qualification. KRAFTON's 2026 esports roadmap called for more than 30 National Championship events across eight-plus regions this year, split across Spring and Fall seasons, and the Fall wave is now rolling out country by country.",
+      },
+      { type: "heading", level: 2, text: "One Confirmed Date: South Asia Fall" },
+      {
+        type: "paragraph",
+        text: "PUBG Mobile National Championship South Asia 2026 Fall is locked in for August 26–30, an online tournament organized by KRAFTON, Level Infinite, and Esports County. It's a useful anchor point for the wider Fall wave, since most other regional National Championships are expected to land in a similar August-to-October window as their Spring counterparts did earlier this year.",
+      },
+      { type: "heading", level: 2, text: "Why the Local Layer Matters" },
+      {
+        type: "list",
+        items: [
+          "Winners and top finishers from each National Championship advance to that region's PMPL, PMCL, or PMGO qualifying pathway",
+          "The format gives players in smaller or emerging PUBG Mobile markets a direct, visible route into the professional circuit without needing an existing org contract",
+          "Spring 2026 National Championships already produced results — Philippines' Hyve International, for instance, advanced through their national title into PMCL Southeast Asia",
+          "Fall results feed toward PMGO Season 2 and, further down the line, Global Championship qualification in Türkiye",
+        ],
+      },
+      {
+        type: "tip",
+        text: "If you're trying to follow a specific country's scene, check that region's official PUBG Mobile Esports social channels directly — National Championship schedules are confirmed region by region rather than announced all at once, so global esports calendars often lag behind the local announcements.",
+      },
+      { type: "heading", level: 2, text: "How to Watch" },
+      {
+        type: "paragraph",
+        text: "Coverage is regional and typically carried on each country's PUBG Mobile Esports channel in the local language, rather than a single unified global broadcast. Check back as more Fall dates get confirmed region by region.",
       },
     ],
   },

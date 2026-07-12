@@ -59,6 +59,7 @@ function EventCard({ event }) {
 export default function UpcomingGames() {
   const ongoing  = events.filter(e => e.status === 'ongoing')
   const upcoming = events.filter(e => e.status === 'upcoming')
+  const past     = events.filter(e => e.status === 'past')
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
@@ -104,6 +105,20 @@ export default function UpcomingGames() {
           ))}
         </div>
       </div>
+
+      {/* PAST EVENTS */}
+      {past.length > 0 && (
+        <div className="mb-10">
+          <div className="section-label mb-5">Past Events</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {past.map((ev, i) => (
+              <div key={ev.slug} className="animate-slide-up" style={{ animationDelay: `${i * 0.05}s` }}>
+                <EventCard event={ev} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* PUBG Updates anchor */}
       <div id="expos" className="gaming-card p-6 text-center mt-8" style={{ background: 'rgba(58,232,88,0.03)' }}>
