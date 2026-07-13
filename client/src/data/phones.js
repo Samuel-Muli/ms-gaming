@@ -18,10 +18,14 @@ export const phoneArticles = [
         type: "paragraph",
         text: "The ROG Phone 9 arrives as the most aggressive gaming smartphone ASUS has ever made. With the Snapdragon 8 Elite chip, a 165Hz AMOLED display, and an entirely redesigned cooling system, it's a device built with one primary goal: make every mobile game run flawlessly.",
       },
-      { type: "heading", level: 2, text: "Display: 165Hz and It Shows" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Display: 165Hz with a 720Hz Touch Sampling Rate",
+      },
       {
         type: "paragraph",
-        text: "The 6.78\" AMOLED panel at 2400×1080 isn't the sharpest by pixel density, but the 165Hz refresh rate and 1ms touch latency combine to make PUBG Mobile feel like a different game. Swiping, aiming with gyroscope, and tracking moving targets is perceptibly smoother than any 120Hz phone.",
+        text: "The 6.78\" E6 AMOLED panel at 2400×1080 isn't the sharpest by pixel density, but the 165Hz refresh rate, 1ms touch latency, and a 720Hz touch sampling rate combine to make PUBG Mobile feel like a different game. Swiping, aiming with gyroscope, and tracking moving targets is perceptibly smoother than any 120Hz phone, and the faster sampling rate specifically helps register quick flick shots in close-range fights.",
       },
       { type: "heading", level: 2, text: "Performance: Snapdragon 8 Elite" },
       {
@@ -37,10 +41,19 @@ export const phoneArticles = [
         type: "paragraph",
         text: "The ultrasonic shoulder triggers are the ROG Phone's signature feature. In PUBG Mobile, mapping ADS to the left trigger and fire to the right trigger gives you a 4-finger claw equivalent — without the hand contortion. Recoil control improves immediately.",
       },
+      { type: "heading", level: 2, text: "Build & Durability" },
+      {
+        type: "paragraph",
+        text: "ASUS pairs the performance with a sleek matte glass body and IP68 water and dust resistance — durability most gaming phones skip in favor of shaving off grams. It feels stable and mature in the hand, closer to a standard flagship than the more toy-like design language some gaming phones lean into.",
+      },
+      {
+        type: "warning",
+        text: "This is a premium flagship with a premium price to match, at around $999. It's built for esports players and serious PUBG grinders who want every frame advantage, not for anyone shopping on a budget.",
+      },
       { type: "heading", level: 2, text: "Verdict" },
       {
         type: "paragraph",
-        text: "If mobile gaming is your primary activity, the ROG Phone 9 is the best device money can buy in 2025. Battery life (6000mAh) lasts a full day of heavy use. The AirTriggers alone justify the premium for serious PUBG Mobile players. Priced at ~$999.",
+        text: "If mobile gaming is your primary activity, the ROG Phone 9 is the best device money can buy in its category — the combination of AirTriggers, sustained 90fps performance, and IP68 durability is hard to find anywhere else. Battery life (6000mAh) lasts a full day of heavy use, and the AirTriggers alone justify the premium for serious PUBG Mobile players.",
       },
     ],
   },
@@ -171,7 +184,7 @@ export const phoneArticles = [
     content: [
       {
         type: "paragraph",
-        text: "The Infinix GT 30 Pro is a purpose-built gaming phone that punches well above its ~$300 price tag. It's been adopted as the official tournament phone for the PUBG MOBILE Super League (PMSL)[reference:0] — a strong endorsement of its competitive credentials.",
+        text: "The Infinix GT 30 Pro is a purpose-built gaming phone that punches well above its ~$300 price tag. It's been adopted as the official tournament phone for the PUBG MOBILE Super League (PMSL) — a strong endorsement of its competitive credentials.",
       },
       {
         type: "heading",
@@ -180,7 +193,7 @@ export const phoneArticles = [
       },
       {
         type: "paragraph",
-        text: "PUBG Mobile on the GT 30 Pro runs at a smooth 120FPS on Smooth graphics settings[reference:1]. During extensive testing, the phone averaged 114fps in Team Deathmatch and 106-107fps in 30-minute Erangel matches[reference:2][reference:3]. The MediaTek Dimensity 8350 Ultimate chipset, paired with up to 24GB of extended RAM, handles the game without major throttling[reference:4].",
+        text: "PUBG Mobile on the GT 30 Pro runs at a smooth 120FPS on Smooth graphics settings. During extensive testing, the phone averaged 114fps in Team Deathmatch and 106-107fps in 30-minute Erangel matches. The MediaTek Dimensity 8350 Ultimate chipset, paired with up to 24GB of extended RAM, handles the game without major throttling.",
       },
       {
         type: "heading",
@@ -189,7 +202,7 @@ export const phoneArticles = [
       },
       {
         type: "paragraph",
-        text: "The 6.67-inch 1.5K AMOLED panel with a 144Hz refresh rate and 2160Hz touch sampling feels incredibly responsive[reference:5]. More importantly, the built-in capacitive shoulder buttons (GT Triggers) let you map ADS and fire — giving you a four-finger claw experience without awkward hand gymnastics[reference:6].",
+        text: "The 6.67-inch 1.5K AMOLED panel with a 144Hz refresh rate and 2160Hz touch sampling feels incredibly responsive. More importantly, the built-in capacitive shoulder buttons (GT Triggers) let you map ADS and fire — giving you a four-finger claw experience without awkward hand gymnastics.",
       },
       {
         type: "heading",
@@ -198,7 +211,7 @@ export const phoneArticles = [
       },
       {
         type: "paragraph",
-        text: "The 5500mAh battery delivers solid gaming sessions, though battery optimization isn't class-leading — expect about 3% drain per 5 minutes of gameplay[reference:7]. The 3D Vapour Cloud Chamber cooling system helps, but temperatures can reach 46-48°C during extended matches[reference:8][reference:9].",
+        text: "The 5500mAh battery delivers solid gaming sessions, though battery optimization isn't class-leading — expect about 3% drain per 5 minutes of gameplay. The 3D Vapour Cloud Chamber cooling system helps, but temperatures can reach 46-48°C during extended matches.",
       },
       {
         type: "warning",
@@ -207,7 +220,7 @@ export const phoneArticles = [
       { type: "heading", level: 2, text: "Verdict" },
       {
         type: "paragraph",
-        text: "The Infinix GT 30 Pro is arguably the best budget gaming phone of 2025[reference:10]. It delivers 120FPS PUBG, physical triggers that give you a real edge, and a display that feels like cheating. For competitive PUBG players on a budget, this is the clear winner.",
+        text: "The Infinix GT 30 Pro is arguably the best budget gaming phone of 2025. It delivers 120FPS PUBG, physical triggers that give you a real edge, and a display that feels like cheating. For competitive PUBG players on a budget, this is the clear winner.",
       },
     ],
   },
@@ -237,7 +250,7 @@ export const phoneArticles = [
       },
       {
         type: "paragraph",
-        text: "PUBG Mobile runs at a stable 60FPS on high settings on the Note 40 Pro+[reference:11]. The MediaTek Dimensity 7020 chip handles the game without major issues, and the 12GB RAM with memory fusion helps with multitasking[reference:12]. However, it doesn't reach the 120FPS mark like dedicated gaming phones.",
+        text: "PUBG Mobile runs at a stable 60FPS on high settings on the Note 40 Pro+. The MediaTek Dimensity 7020 chip handles the game without major issues, and the 12GB RAM with memory fusion helps with multitasking. However, it doesn't reach the 120FPS mark like dedicated gaming phones.",
       },
       {
         type: "heading",
@@ -251,7 +264,7 @@ export const phoneArticles = [
       { type: "heading", level: 2, text: "Display: 120Hz Curved AMOLED" },
       {
         type: "paragraph",
-        text: "The 6.78-inch curved display looks premium, but the curve can cause accidental touches during intense gameplay[reference:13]. For PUBG, a flat display is generally preferred for precise touch controls.",
+        text: "The 6.78-inch curved display looks premium, but the curve can cause accidental touches during intense gameplay. For PUBG, a flat display is generally preferred for precise touch controls.",
       },
       {
         type: "warning",
@@ -281,22 +294,22 @@ export const phoneArticles = [
     content: [
       {
         type: "paragraph",
-        text: "The Infinix Note Edge focuses heavily on design — a quad-curved display, slim 7.2mm body, and JBL-tuned stereo speakers give it a flagship-like appearance[reference:14][reference:15]. But for PUBG, the hardware tells a different story.",
+        text: "The Infinix Note Edge focuses heavily on design — a quad-curved display, slim 7.2mm body, and JBL-tuned stereo speakers give it a flagship-like appearance. But for PUBG, the hardware tells a different story.",
       },
       { type: "heading", level: 2, text: "Performance: The Weak Link" },
       {
         type: "paragraph",
-        text: 'The MediaTek Dimensity 7100 chipset and UFS 2.2 storage feel average for the price[reference:16]. PUBG Mobile runs at around 60FPS[reference:17], but the performance doesn\'t match the premium design. In direct comparison, the Smartprix review explicitly advises: "Skip it if you care about gaming performance"[reference:18].',
+        text: "The MediaTek Dimensity 7100 chipset and UFS 2.2 storage feel average for the price. PUBG Mobile runs at around 60FPS, but the performance doesn't match the premium design — several other reviews have been just as blunt, essentially telling gaming-focused buyers to look elsewhere.",
       },
       { type: "heading", level: 2, text: "Battery: The Saving Grace" },
       {
         type: "paragraph",
-        text: "The 6500mAh battery is the standout feature[reference:19]. You can expect marathon gaming sessions, and bypass charging lets you play while plugged in without damaging battery health[reference:20].",
+        text: "The 6500mAh battery is the standout feature. You can expect marathon gaming sessions, and bypass charging lets you play while plugged in without damaging battery health.",
       },
       { type: "heading", level: 2, text: "Display: Beautiful But Impractical" },
       {
         type: "paragraph",
-        text: "The 6.78-inch AMOLED curved display with 144Hz refresh rate looks stunning[reference:21]. However, the aggressive curve can cause accidental touches during intense gunfights — a significant drawback for competitive FPS games.",
+        text: "The 6.78-inch AMOLED curved display with 144Hz refresh rate looks stunning. However, the aggressive curve can cause accidental touches during intense gunfights — a significant drawback for competitive FPS games.",
       },
       {
         type: "warning",
@@ -335,21 +348,21 @@ export const phoneArticles = [
       },
       {
         type: "paragraph",
-        text: "The MediaTek Dimensity 7300 Ultimate processor delivers 90-100FPS in PUBG on high settings, with no noticeable throttling even during long sessions[reference:24][reference:25]. The 12GB RAM (expandable to 24GB via memory fusion) keeps multitasking smooth[reference:26]. However, some reviews note the Pova 7 Pro feels more sluggish than rivals in the same price band[reference:27].",
+        text: "The MediaTek Dimensity 7300 Ultimate processor delivers 90-100FPS in PUBG on high settings, with no noticeable throttling even during long sessions. The 12GB RAM (expandable to 24GB via memory fusion) keeps multitasking smooth. However, some reviews note the Pova 7 Pro feels more sluggish than rivals in the same price band.",
       },
       { type: "heading", level: 2, text: "Battery & Display: The Highlights" },
       {
         type: "paragraph",
-        text: "The 6000mAh battery with 45W fast charging lasts 1.5-2 days on normal use and a full day of gaming[reference:28]. The 6.78-inch 1.5K AMOLED display with 144Hz refresh rate delivers vivid colors and smooth scrolling[reference:29].",
+        text: "The 6000mAh battery with 45W fast charging lasts 1.5-2 days on normal use and a full day of gaming. The 6.78-inch 1.5K AMOLED display with 144Hz refresh rate delivers vivid colors and smooth scrolling.",
       },
       { type: "heading", level: 2, text: "Design & Cameras" },
       {
         type: "paragraph",
-        text: "The design stands out with LED glyphs around the camera that light up for notifications[reference:30]. The 64MP camera handles daytime shots well but struggles in low light[reference:31].",
+        text: "The design stands out with LED glyphs around the camera that light up for notifications. The 64MP camera handles daytime shots well but struggles in low light.",
       },
       {
         type: "warning",
-        text: "Some users report Bluetooth connectivity issues with headphones[reference:32]. If you rely on wireless audio for PUBG, this is worth noting.",
+        text: "Some users report Bluetooth connectivity issues with headphones. If you rely on wireless audio for PUBG, this is worth noting.",
       },
       { type: "heading", level: 2, text: "Verdict" },
       {
@@ -380,17 +393,17 @@ export const phoneArticles = [
       { type: "heading", level: 2, text: "Performance: Flagship Killer" },
       {
         type: "paragraph",
-        text: "Powered by the Snapdragon 8 Elite processor with up to 16GB or 24GB of RAM, the RedMagic 10 Pro runs PUBG Mobile at a buttery-smooth 144FPS on ultra settings[reference:33][reference:34]. No lag, no overheating — just pure, uninterrupted gaming[reference:35]. The phone's responsive display makes every touch feel instantaneous[reference:36].",
+        text: "Powered by the Snapdragon 8 Elite processor with up to 16GB or 24GB of RAM, the RedMagic 10 Pro runs PUBG Mobile at a buttery-smooth 144FPS on ultra settings. No lag, no overheating — just pure, uninterrupted gaming. The phone's responsive display makes every touch feel instantaneous.",
       },
       { type: "heading", level: 2, text: "Battery: Marathon Ready" },
       {
         type: "paragraph",
-        text: "The 7050mAh battery is among the largest in any smartphone[reference:37]. You can game for hours without reaching for a charger, making this ideal for long PUBG sessions.",
+        text: "The 7050mAh battery is among the largest in any smartphone. You can game for hours without reaching for a charger, making this ideal for long PUBG sessions.",
       },
       { type: "heading", level: 2, text: "The Competition" },
       {
         type: "paragraph",
-        text: "Against the ASUS ROG Phone 9, the RedMagic 10 Pro offers similar flagship performance[reference:38]. Both run PUBG at max settings without breaking a sweat. The choice comes down to design preference and availability.",
+        text: "Against the ASUS ROG Phone 9, the RedMagic 10 Pro offers similar flagship performance. Both run PUBG at max settings without breaking a sweat. The choice comes down to design preference and availability.",
       },
       {
         type: "warning",
@@ -400,51 +413,6 @@ export const phoneArticles = [
       {
         type: "paragraph",
         text: "The RedMagic 10 Pro is arguably the ultimate PUBG phone. 144FPS, massive battery, and flagship cooling make it a no-compromise choice for serious gamers. If you have the budget, this is endgame.",
-      },
-    ],
-  },
-  {
-    slug: "rog-phone-9-pubg-review",
-    title: "ASUS ROG Phone 9: The Professional's Choice",
-    category: "phone",
-    thumbColor: "#0d0d1a",
-    thumbUrl: "https://i.ibb.co/cRVyZyt/OIP.webp",
-    thumbIcon: "🎮",
-    tags: ["ROG Phone 9", "Android", "ASUS", "Gaming", "Flagship"],
-    author: "【M。S】",
-    publishedAt: "2025-06-15",
-    readTime: 6,
-    featured: false,
-    excerpt:
-      "The ROG Phone 9 combines a Snapdragon 8 Elite chip, up to 16GB RAM, and 185Hz display for the ultimate PUBG experience. But is it worth the flagship price?",
-    content: [
-      {
-        type: "paragraph",
-        text: "ASUS has been the gold standard for gaming phones for years, and the ROG Phone 9 continues that legacy. It's built for serious gamers who demand the absolute best.",
-      },
-      { type: "heading", level: 2, text: "Performance: No Compromises" },
-      {
-        type: "paragraph",
-        text: "The Snapdragon 8 Elite chipset paired with 16GB of RAM handles any game on max settings without frame drops[reference:39]. PUBG Mobile runs flawlessly, with the 720Hz touch sampling rate delivering super-fast response times ideal for competitive play[reference:40].",
-      },
-      { type: "heading", level: 2, text: "Display: 185Hz Overkill" },
-      {
-        type: "paragraph",
-        text: "The E6 display with 185Hz refresh rate offers faster touch response, lower latency, and greater visual fluidity[reference:41]. Whether you can perceive the difference beyond 144Hz is debatable, but for competitive gamers, every millisecond counts.",
-      },
-      { type: "heading", level: 2, text: "Build & Durability" },
-      {
-        type: "paragraph",
-        text: "ASUS prioritizes durability with a sleek matte glass body and IP68 protection[reference:42]. The phone feels more stable and mature in various conditions compared to competitors[reference:43].",
-      },
-      {
-        type: "warning",
-        text: "The ROG Phone 9 is a premium flagship with a premium price. It's designed for esports players and serious gamers who want the absolute best — not for budget-conscious buyers.",
-      },
-      { type: "heading", level: 2, text: "Verdict" },
-      {
-        type: "paragraph",
-        text: "The ROG Phone 9 is the professional's choice for PUBG. It offers the best combination of performance, display, and build quality. If budget isn't a concern and you want the ultimate gaming phone, this is it.",
       },
     ],
   },
@@ -465,7 +433,7 @@ export const phoneArticles = [
     content: [
       {
         type: "paragraph",
-        text: "The Poco M8 Pro is a budget gaming phone that gets the fundamentals right: decent performance, a high refresh-rate display, and a battery that doesn't die after an hour[reference:44].",
+        text: "The Poco M8 Pro is a budget gaming phone that gets the fundamentals right: decent performance, a high refresh-rate display, and a battery that doesn't die after an hour.",
       },
       {
         type: "heading",
@@ -474,17 +442,17 @@ export const phoneArticles = [
       },
       {
         type: "paragraph",
-        text: "The Snapdragon 7s Gen 4 processor with up to 12GB of RAM delivers around 50FPS on medium settings in PUBG Mobile[reference:45]. It won't win any speed records, but the mid-range chip avoids throttling even after an hour of gaming[reference:46].",
+        text: "The Snapdragon 7s Gen 4 processor with up to 12GB of RAM delivers around 50FPS on medium settings in PUBG Mobile. It won't win any speed records, but the mid-range chip avoids throttling even after an hour of gaming.",
       },
       { type: "heading", level: 2, text: "Display & Battery: The Highlights" },
       {
         type: "paragraph",
-        text: "The 6.83-inch AMOLED 1.5K panel with 12-bit color depth and 1,400-nit peak brightness is big and beautiful[reference:47]. The 6500mAh silicon-carbon battery can last multiple days on a single charge[reference:48].",
+        text: "The 6.83-inch AMOLED 1.5K panel with 12-bit color depth and 1,400-nit peak brightness is big and beautiful. The 6500mAh silicon-carbon battery can last multiple days on a single charge.",
       },
       { type: "heading", level: 2, text: "The Catch: Software" },
       {
         type: "paragraph",
-        text: "HyperOS 2.2 is chock-full of bloatware, and you'll get full-screen ads in some system apps[reference:49]. It's a reminder that you get what you pay for.",
+        text: "HyperOS 2.2 is chock-full of bloatware, and you'll get full-screen ads in some system apps. It's a reminder that you get what you pay for.",
       },
       {
         type: "warning",
@@ -494,6 +462,157 @@ export const phoneArticles = [
       {
         type: "paragraph",
         text: "The Poco M8 Pro is a solid budget option for casual PUBG players. The battery life is exceptional, and the display is gorgeous. Just be prepared for the software experience and moderate frame rates.",
+      },
+    ],
+  },
+  {
+    slug: "redmagic-11-pro-review",
+    title: "RedMagic 11 Pro Review: The First Liquid-Cooled Phone Changes the PUBG Conversation",
+    category: "phone",
+    thumbColor: "#001a2e",
+    thumbIcon: "💧",
+    tags: ["RedMagic 11 Pro", "Android", "Liquid Cooling", "Gaming Phone", "Review"],
+    author: "【M。S】",
+    publishedAt: "2025-11-10",
+    readTime: 8,
+    featured: true,
+    excerpt:
+      "AquaCore makes the RedMagic 11 Pro the first mass-produced phone with genuine liquid cooling, not just a bigger vapor chamber. With ASUS now out of the gaming phone business, this is the new benchmark for sustained PUBG performance.",
+    content: [
+      {
+        type: "paragraph",
+        text: "The RedMagic 11 Pro's headline feature sounds like marketing exaggeration until you actually see it: a real liquid-cooling loop, visible through the transparent rear panels, built into a phone under 9mm thick. It's a legitimately new approach to the thermal throttling problem that's plagued every gaming phone before it, and it lands at a moment when the competition has thinned out considerably.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "AquaCore: Actual Liquid Cooling, Not Just a Bigger Vapor Chamber",
+      },
+      {
+        type: "paragraph",
+        text: "AquaCore is a three-stage cooling system: composite Liquid Metal 3.0 pulls heat off the chipset first, a fluorinated liquid circulates through sealed channels across a 13,116mm² vapor chamber — the largest in the industry — and a 24,000 RPM turbo fan expels the heat through aerospace-aluminum ducts. RedMagic claims the system has cleared tens of thousands of drop tests without leakage, and the coolant itself is non-conductive in the small quantities used, so a minor seal failure wouldn't risk shorting the board.",
+      },
+      {
+        type: "warning",
+        text: "The tradeoff for all that internal cooling is that the heat has to go somewhere, and that somewhere is the metal-and-glass rear panel. Expect the back of the phone to get noticeably warm during extended sessions — the system is protecting the chipset's frame rate, not your hands.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Performance: Snapdragon 8 Elite Gen 5 and Zero Throttling",
+      },
+      {
+        type: "paragraph",
+        text: "The Snapdragon 8 Elite Gen 5 is paired with RedMagic's own RedCore R4 co-processor chip, up to 24GB of RAM, and up to 1TB of storage. In PUBG Mobile, the combination of active cooling and headroom means the phone simply doesn't slow down over long sessions the way passively-cooled flagships eventually do — sustained frame rate, not peak benchmark numbers, is where this phone actually separates itself from the field.",
+      },
+      {
+        type: "tip",
+        text: "The 520Hz capacitive shoulder triggers are worth mapping immediately if you're coming from touch-only controls. Set ADS to one trigger and fire to the other for a claw-grip equivalent without the hand strain of an actual four-finger claw.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Display and Battery",
+      },
+      {
+        type: "paragraph",
+        text: "The 6.85-inch 144Hz AMOLED panel uses an under-display selfie camera to keep the front glass uninterrupted, which matters more than it sounds like in a fast-moving battle royale where every pixel of screen edge counts. The 7,500mAh battery is paired with 120W wired and 80W wireless charging, and RedMagic's own testing claims lower battery drain during gameplay than competing flagships — a believable claim given how much of the thermal load here is handled without spinning the battery-draining fan as hard as older RedMagic models needed to.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Software Catch",
+      },
+      {
+        type: "paragraph",
+        text: "The hardware story is genuinely impressive; the software is the usual RedMagic asterisk. Expect occasional rough translations in system menus, a more aggressive background-app killer than most Android skins default to, and a camera system that remains the weakest part of the package for anything beyond daytime shots. None of that touches the PUBG experience directly, but it's worth knowing going in.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Final Verdict from 【M。S】",
+      },
+      {
+        type: "paragraph",
+        text: "With ASUS confirming it won't release another ROG Phone, the RedMagic 11 Pro doesn't just win on its own merits — it inherits the top of the category almost by default. Fortunately, it earns the spot: the AquaCore system is the first genuinely new idea in phone cooling in years, and for anyone whose PUBG sessions regularly run past the 30-minute mark where lesser phones start throttling, that's the whole ballgame.",
+      },
+    ],
+  },
+  {
+    slug: "best-gaming-phones-2026",
+    title: "Best Gaming Phones for PUBG Mobile in 2026 — Ranked",
+    category: "phone",
+    thumbColor: "#0d1a14",
+    thumbIcon: "🏆",
+    tags: ["Gaming Phone", "PUBG Mobile", "Ranked", "Buying Guide", "2026"],
+    author: "【M。S】",
+    publishedAt: "2026-06-20",
+    readTime: 9,
+    featured: true,
+    excerpt:
+      "The lineup has genuinely shifted this year — ASUS exited the gaming phone business entirely, RedMagic's AquaCore cooling changed what 'no throttling' actually means, and both Samsung and Apple pushed out new flagships. Here's the updated 2026 ranking.",
+    content: [
+      {
+        type: "paragraph",
+        text: "A lot changed in this category since our 2025 ranking. Processor performance, display refresh rate, and thermal management still decide who wins a PUBG gunfight, in that order — but the actual devices worth buying have shifted enough that last year's list needs a real update, not a refresh.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "1. RedMagic 11 Pro — Best Overall",
+      },
+      {
+        type: "paragraph",
+        text: "AquaCore liquid cooling, Snapdragon 8 Elite Gen 5, a 144Hz display, and a 7,500mAh battery make this the clear top pick. It's the first phone to solve sustained thermal throttling with something other than a bigger vapor chamber, and in PUBG Mobile that translates directly into frame rate that doesn't decay over a 30-minute match.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "2. ASUS ROG Phone 9 — Still Excellent, But It's the End of the Line",
+      },
+      {
+        type: "paragraph",
+        text: "ASUS confirmed in January that it won't release any new phones going forward, ending the ROG Phone line indefinitely. The 9 Pro remains a genuinely capable PUBG device — 165Hz display, AirTriggers, strong sustained performance — and existing owners keep their software support, but there's no ROG Phone 10 coming to replace it if you're buying fresh today.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "3. Samsung Galaxy S26 Ultra — Best All-Rounder",
+      },
+      {
+        type: "paragraph",
+        text: "The S26 Ultra succeeds the S25 Ultra with the new Snapdragon 8 Elite Gen 5 for Galaxy, a 6.9-inch 120Hz Dynamic AMOLED 2X display, and Samsung's usual class-leading sustained performance for a device that isn't marketed as a gaming phone. Still the pick if you want one phone that's a great daily driver and doesn't compromise your PUBG sessions.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "4. iPhone 17 Pro Max — Best for iOS PUBG",
+      },
+      {
+        type: "paragraph",
+        text: "The 17 Pro Max is now the iPhone to get for mobile gaming, replacing last year's 16 Pro Max pick with another generational GPU jump and the same excellent iOS-side game optimization. The 90fps cap on PUBG Mobile's iOS client is unchanged, and there's still no equivalent to AirTriggers, but MFi controller support remains excellent for players who want physical input.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "5. Infinix GT 30 Pro — Best Budget Option",
+      },
+      {
+        type: "paragraph",
+        text: "Still the value pick for players who don't need flagship money to compete. 120FPS on Smooth graphics, built-in GT Triggers, and PMSL's own tournament-phone endorsement carry it through another year as the budget recommendation, with the caveat that thermals under extended play remain its weakest point relative to the phones above it on this list.",
+      },
+      {
+        type: "tip",
+        text: "If you already own a ROG Phone 9, there's no urgency to switch — it's still a top-tier PUBG device. The RedMagic 11 Pro matters most for anyone buying new, since it's now the only device on this list backed by an active, ongoing product line built specifically around gaming.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Final Verdict from 【M。S】",
+      },
+      {
+        type: "paragraph",
+        text: "2026 is the first year in a while where the 'best gaming phone' pick isn't ASUS by default — RedMagic earned it with a genuinely new cooling approach, not just a spec bump. If budget allows, the 11 Pro is the buy; if you're not ready to spend flagship money, the GT 30 Pro still gets the job done.",
       },
     ],
   },

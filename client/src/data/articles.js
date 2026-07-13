@@ -1262,6 +1262,165 @@ export const articles = [
       },
     ],
   },
+  {
+    slug: "pubg-mobile-royale-pass-a20-guide",
+    title: "PUBG Mobile Royale Pass A20 'Wavesong': Full Rewards Breakdown",
+    category: "pubg",
+    thumbColor: "#0a1a1a",
+    thumbIcon: "🌊",
+    tags: ["PUBG Mobile", "Royale Pass", "Update 4.5", "Rewards"],
+    author: "【M。S】",
+    publishedAt: "2026-07-12",
+    readTime: 6,
+    featured: false,
+    excerpt:
+      "A20 trades Hero's Crown gold for a summer-and-ocean theme, headlined by the Wavesong Sprite Set and an upgradable KAR98K. Pre-order is live now ahead of the July 16 launch — here's the full breakdown.",
+    content: [
+      {
+        type: "paragraph",
+        text: "Royale Pass A20 launches alongside the tail end of Version 4.5 on July 16 and runs through September 11, giving it the usual two-month window. Pre-Order Perks are already live and close the same day the pass launches, so there's a short window right now to lock in bonus items before the season proper begins. Where A19 leaned into Hero's Crown's marble-and-gold look, A20 shifts to a summer, ocean-themed aesthetic that doesn't tie directly into the NARUTO collaboration running alongside it.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Pass Tiers: Free, Elite, and Elite Pass Plus",
+      },
+      {
+        type: "paragraph",
+        text: "The structure hasn't changed from previous seasons. The free track unlocks through normal play and missions with no purchase required. The Elite Pass runs 720 UC for the full 100-level track, and reaching level 100 pays that full 720 UC back across milestone rewards — a completed pass effectively funds the next one. Elite Pass Plus costs more but starts you 25 levels ahead, which mainly benefits players joining mid-season or without time to grind daily missions across the full two months.",
+      },
+      {
+        type: "list",
+        items: [
+          "Free Pass: still worth activating even if you never spend a UC, since several cosmetic tiers are free-track eligible",
+          "720 UC Elite Pass: the value pick for anyone playing regularly enough to realistically hit level 100",
+          "Elite Pass Plus: best for late joiners or players who know they won't have grinding time this season",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Headline Rewards: Wavesong Sprite and the KAR98K",
+      },
+      {
+        type: "paragraph",
+        text: "The level 100 centerpiece is the Wavesong Sprite Set — a sea-princess look in white and light blue with shell and bow details and flowing blue-purple hair, easily one of the more elaborate outfit sets recent passes have shipped. Level 50 unlocks an upgradable KAR98K skin that follows the same white-and-light-blue palette with sea wave patterns, built to be leveled up from its base form using progression materials rather than arriving fully finished. The two are clearly designed to be worn together.",
+      },
+      {
+        type: "list",
+        items: [
+          "Beach Pool Convertible — a bright blue vehicle skin with pool and beach detailing that rounds out the summer theme",
+          "Azure Sea Ripple Trail — a movement effect that leaves a water ripple behind your character while running",
+          "Victory Dance (AZO) — a new post-match emote",
+          "Additional throwable and backpack skins fill out the lower and mid-level rewards",
+        ],
+      },
+      {
+        type: "tip",
+        text: "The in-game Pre-Order Perks screen values the full A20 reward set north of 80,000 UC against a 720 UC entry cost, and that's before the level-100 rebate. If you're going to buy the pass at all this season, buying during the Pre-Order window before July 16 is strictly better than waiting.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Is Elite Pass Plus Worth It?",
+      },
+      {
+        type: "paragraph",
+        text: "If you can realistically play most days across the two-month season, the standard Elite Pass gets you to level 100 and the full rebate without spending extra on the 25-level skip. Plus earns its cost back for players who know they're starting late, traveling mid-season, or juggling limited playtime — the head start is the entire value proposition, not a speed bonus for players who were going to finish anyway.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Final Verdict from 【M。S】",
+      },
+      {
+        type: "paragraph",
+        text: "A20 doesn't try to out-spectacle Hero's Crown, and it doesn't need to — the Wavesong Sprite and KAR98K pairing is strong enough to carry the season on its own. Buy during Pre-Order if you're buying at all, prioritize weekly missions early since they're still the fastest levels in the track, and don't sleep on the free tier even if you're skipping Elite this season.",
+      },
+    ],
+  },
+  {
+    slug: "pubg-mobile-naruto-gilt-set-x-suit-prize-path-guide",
+    title: "NARUTO Gilt Set, Druvaen X-Suit, and Prize Path: What's Actually Worth Your UC",
+    category: "pubg",
+    thumbColor: "#1a1005",
+    thumbIcon: "🎰",
+    tags: ["PUBG Mobile", "NARUTO Shippuden", "Gilt Set", "X-Suit", "Prize Path"],
+    author: "【M。S】",
+    publishedAt: "2026-07-13",
+    readTime: 7,
+    featured: false,
+    excerpt:
+      "Between the free Prize Path, the premium track, the Lucky Spin, the Gilt Set, and the Druvaen X-Suit, Version 4.5 gives you five different ways to spend on NARUTO cosmetics. Here's what's actually worth prioritizing.",
+    content: [
+      {
+        type: "paragraph",
+        text: "The NARUTO: Ninjas Assemble collaboration doesn't just add one shop item — it stacks a free reward track, a premium Prize Path, a Lucky Spin gacha, and two headline cosmetic sets on top of each other, all competing for the same UC balance. Here's a clearer breakdown of what each track actually gets you, so you're not spending blind.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Start With the Free Prize Path Rewards",
+      },
+      {
+        type: "paragraph",
+        text: "Before spending anything, clear what's free. PUBG Mobile is calling this its largest free-rewards event yet, and the no-cost track alone is worth north of $600 in unlockable content — a themed lobby background, the NARUTO Main Theme BGM, and a Choice Chest letting you pick between the Akatsuki, Elite Hidden Leaf Ninja, or Konoha Anbu sets. None of it requires UC, and all of it should be claimed before you evaluate whether the paid tracks are worth it.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Premium Prize Path: Guaranteed, But Priced Inconsistently",
+      },
+      {
+        type: "paragraph",
+        text: "The premium Prize Path unlocks a guaranteed progression track toward character sets for Naruto, Sasuke, Sakura, Kakashi, Hinata, Gaara, Tsunade, Madara, and Jiraiya — you pay once to unlock the track, then earn through daily play and missions rather than gambling on pulls. The catch is that reported unlock pricing has varied by source, generally somewhere in the 600–900 UC range, so treat the number you see in-game as the real one rather than anything reported ahead of your server's rollout.",
+      },
+      {
+        type: "tip",
+        text: "Prize Path rewards are guaranteed for your UC, unlike the Lucky Spin. If you only have a fixed budget for this collaboration and have to choose one paid track, the Prize Path is the safer spend — you know exactly what you're getting before you pay.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Lucky Spin: Where the Rarest Items Actually Live",
+      },
+      {
+        type: "paragraph",
+        text: "The rarest cosmetics and premium weapon finishes tied to the collaboration sit behind the Lucky Spin gacha wheel rather than the Prize Path. Unlike the Prize Path, spins aren't a guaranteed-reward system — you're paying for a chance at the top-tier pool, with lower-tier consolation items filling out the rest of the wheel.",
+      },
+      {
+        type: "warning",
+        text: "Set a hard UC ceiling before you start spinning. Gacha systems are designed to feel close to a big pull, and it's easy to spend well past what the item would have cost if it were sold directly. If a specific weapon finish is what you actually want, check whether it's obtainable through the Prize Path or shop first.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Gilt Set: The Collaboration's Premium Shop Centerpiece",
+      },
+      {
+        type: "paragraph",
+        text: "The first-ever NARUTO Gilt Set arrived July 12 in the paid shop rotation, built around Naruto's Sage Mode and Six Paths Sage Mode with form-switching between the two states. It pairs with a dual-form, level-upgradable AUG skin whose final upgraded form takes on Nine-Tails theming — a direct visual tie to Kurama. This is the single most expensive item tied to the collaboration, and it's aimed squarely at players who want the most complete, highest-fidelity version of the Naruto look rather than a partial set.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Druvaen X-Suit: Three Forms, One Skin",
+      },
+      {
+        type: "paragraph",
+        text: "The Druvaen X-Suit is built differently from a standard X-Suit — rather than one upgrade path, it ships with three separate upgradable forms, each themed to a different RGB color, paired with an upgradable M1014 shotgun skin. Exact shop timing for the Druvaen X-Suit has shifted across previews, so confirm it's actually live in your region's shop before budgeting UC specifically around it.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Final Verdict from 【M。S】",
+      },
+      {
+        type: "paragraph",
+        text: "Clear the free track first, always. If you're spending at all, the Prize Path is the more predictable purchase and probably the better first stop for most players — the Gilt Set and Druvaen X-Suit are for people who already know they want the single best-looking version of this collaboration and are willing to pay shop price for the certainty that gacha can't offer.",
+      },
+    ],
+  },
 ];
 
 export function getArticleBySlug(slug) {
