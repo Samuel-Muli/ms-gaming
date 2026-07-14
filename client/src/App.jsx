@@ -38,8 +38,7 @@ export default function App() {
             <Route path="community/:id" element={<CommunityPost />} />
             <Route path="articles/:slug" element={<Article category="pubg" />} />
             <Route path={ADMIN_PATH} element={<AdminDashboard />} />
-            {/* Keep /admin as redirect for existing bookmarks — just shows not found */}
-            <Route path="admin" element={<NotFound />} />
+
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

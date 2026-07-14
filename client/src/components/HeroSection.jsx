@@ -1,4 +1,8 @@
 import { Link } from 'react-router-dom'
+import { articles } from '../data/articles'
+
+// Resolve most recent article at module load time
+const latestArticle = [...articles].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))[0]
 import { Crosshair, ChevronRight, Users, BookOpen, Gamepad2 } from 'lucide-react'
 
 const STATS = [
@@ -82,7 +86,7 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div className="flex flex-wrap gap-3 justify-center mb-16 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <Link to="/articles/pubg-mobile-4-4-heros-crown" className="btn btn-primary text-base px-7 py-3">
+          <Link to={`/articles/${latestArticle?.slug || "pubg-mobile-naruto-gilt-set-x-suit-prize-path-guide"}`} className="btn btn-primary text-base px-7 py-3">
             Latest PUBG <ChevronRight size={16} />
           </Link>
           <Link to="/community" className="btn btn-ghost text-base px-7 py-3">

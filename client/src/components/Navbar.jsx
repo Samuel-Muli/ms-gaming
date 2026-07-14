@@ -14,9 +14,10 @@ const NAV_LINKS = [
     path: '/pubg-articles',
     items: [
       { label: 'All PUBG Articles',    path: '/pubg-articles' },
-      { label: 'Season Updates',       path: '/articles/pubg-mobile-4-4-heros-crown' },
-      { label: 'Weapon Meta',          path: '/articles/pubg-mobile-4-4-weapon-meta' },
-      { label: 'Strategy & Tips',      path: '/community?cat=pubg-strategy' },
+      { label: 'Season Updates',       path: '/pubg-articles?filter=updates' },
+      { label: 'Weapon Meta',          path: '/pubg-articles?filter=weapons' },
+      { label: 'Strategy & Tips',      path: '/pubg-articles?filter=strategy' },
+      { label: 'Events & Collabs',     path: '/pubg-articles?filter=events' },
     ],
   },
   {
@@ -33,10 +34,11 @@ const NAV_LINKS = [
     label: 'Gaming Phones',
     path: '/gaming-phones',
     items: [
-      { label: 'Android Gaming Phones', path: '/gaming-phones#android' },
-      { label: 'iPhone for Gaming',     path: '/gaming-phones#iphone' },
-      { label: 'Budget Gaming Phones',  path: '/gaming-phones#budget' },
-      { label: 'All Phone Reviews',     path: '/gaming-phones' },
+      { label: 'All Phone Reviews',      path: '/gaming-phones' },
+      { label: 'Android Gaming Phones', path: '/gaming-phones?filter=android' },
+      { label: 'iPhone for Gaming',     path: '/gaming-phones?filter=iphone' },
+      { label: 'Budget Gaming Phones',  path: '/gaming-phones?filter=budget' },
+      { label: 'Flagship Phones',       path: '/gaming-phones?filter=flagship' },
     ],
   },
   {

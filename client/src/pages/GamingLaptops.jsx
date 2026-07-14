@@ -1,4 +1,4 @@
-import { Monitor, Cpu, Gamepad2, Laptop } from 'lucide-react'
+import { Monitor, Cpu, Laptop } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
 import { laptopArticles } from '../data/laptops'
