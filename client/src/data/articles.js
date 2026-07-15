@@ -1344,6 +1344,7 @@ export const articles = [
     title: "NARUTO Gilt Set, Druvaen X-Suit, and Prize Path: What's Actually Worth Your UC",
     category: "pubg",
     thumbColor: "#1a1005",
+    thumbUrl: "https://i.ibb.co/MLR3fQz/output.jpg",
     thumbIcon: "🎰",
     tags: ["PUBG Mobile", "NARUTO Shippuden", "Gilt Set", "X-Suit", "Prize Path"],
     author: "【M。S】",
