@@ -25,8 +25,8 @@ Live focus: **PUBG Mobile** — season updates, weapon meta, strategies, and esp
 
 ## 🚀 Tech Stack
 
-- **Frontend:** React 19 · React Router 7 · Tailwind CSS 3 · Vite 6
-- **Backend:** Node.js 18+ · Express 5 · MongoDB (native driver) · Multer 2
+- **Frontend:** React 19 · React Router 7 · Tailwind CSS 3 · Vite 6 · react-helmet-async (per-page SEO)
+- **Backend:** Node.js 18+ · Express 5 · MongoDB (native driver) · Multer 2 · helmet · express-rate-limit
 - **Auth:** Clerk (`@clerk/clerk-react` + `@clerk/backend`)
 - **Fonts:** Orbitron · Barlow Condensed · Rajdhani · JetBrains Mono
 
@@ -36,20 +36,27 @@ Live focus: **PUBG Mobile** — season updates, weapon meta, strategies, and esp
 
 ```
 ms-gaming/
-├── server.js                  ← Express API — all /api/* routes
+├── server.js                  ← Express API — all /api/* routes, plus /sitemap.xml + /robots.txt
 ├── .env                       ← Backend secrets (never commit)
 ├── uploads/                   ← User-uploaded media (auto-created)
+├── scripts/
+│   └── sync-content.js        ← Pushes client/src/data/*.js into MongoDB — run after editing them
 └── client/
     ├── .env                   ← Frontend secrets (never commit)
-    ├── vite.config.js         ← Dev server + /api and /uploads proxies
+    ├── vite.config.js         ← Dev server + /api, /uploads, /sitemap.xml, /robots.txt proxies
     ├── tailwind.config.js
+    ├── public/
+    │   └── ms.ico
     └── src/
-        ├── App.jsx            ← Router (admin path from env)
+        ├── App.jsx            ← Router (admin path from env), lazy-loaded routes
         ├── context/
         │   └── ThemeContext.jsx        ← Light/dark mode (default: light)
+        ├── lib/
+        │   └── content.js              ← Fetches articles/phones/laptops/events from /api/content
         ├── components/
         │   ├── Navbar.jsx              ← Hover dropdowns, mobile 40% drawer
         │   ├── Footer.jsx              ← Collapsible on mobile
+        │   ├── Layout.jsx              ← Site-wide default <Helmet> tags + shell
         │   ├── HeroSection.jsx         ← Points to most-recent article dynamically
         │   ├── ArticleCard.jsx         ← Shimmer, zoom, featured badge, real images
         │   ├── PostCard.jsx            ← Community feed card with glow
@@ -63,13 +70,13 @@ ms-gaming/
         │   ├── GamingPhones.jsx       ← All phone articles + type filters
         │   ├── GamingLaptops.jsx      ← Laptops, Consoles, PC Builds sections
         │   ├── UpcomingGames.jsx      ← Events and tournaments
-        │   ├── Article.jsx            ← Article reader with hero image + comments
+        │   ├── Article.jsx            ← Article reader with hero image + comments + per-page SEO
         │   ├── Community.jsx          ← Forum — create posts with media upload rules
-        │   ├── CommunityPost.jsx      ← Post reader, image collage, threaded comments
+        │   ├── CommunityPost.jsx      ← Post reader, image collage, paginated threaded comments
         │   ├── AdminDashboard.jsx     ← Role management + content moderation
         │   └── NotFound.jsx
         ├── data/
-        │   ├── articles.js            ← PUBG articles (add new ones here)
+        │   ├── articles.js            ← PUBG articles (add new ones here, then `npm run sync-content`)
         │   ├── phones.js              ← Phone articles
         │   ├── laptops.js             ← Laptop/console articles
         │   └── events.js              ← Gaming events
@@ -105,13 +112,14 @@ PORT=8000
 NODE_ENV=development
 CLERK_SECRET_KEY=sk_test_...
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
-ADMIN_SECRET_PATH=your-secret-admin-path
+CORS_ORIGIN=http://localhost:3000
+SITE_URL=http://localhost:3000
 ```
 
 **`client/.env`** (frontend):
 ```env
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
-VITE_ADMIN_PATH=your-secret-admin-path
+VITE_ADMIN_PATH=your-own-random-path
 ```
 
 > ⚠️ Both `.env` files are in `.gitignore` — they won't come through a `git clone`. Copy them manually.
@@ -155,24 +163,31 @@ When an admin changes a user's role, they can add an optional reason note. The u
 
 ## 🔒 Security Notes
 
-- **Admin path** is configured via `VITE_ADMIN_PATH` env var — keep it secret. The old `/admin` route is removed entirely.
+- **Admin path** (`VITE_ADMIN_PATH`) keeps the panel out of the nav, but it is **not** real access control — it's a client env var, so it's compiled as a plain string into the shipped JS bundle and is discoverable by anyone who looks. The actual boundary is the `requireAdmin`/`requireMod` role checks in `server.js`, enforced server-side on every admin/mod route regardless of which URL you hit. The old `/admin` route is removed entirely.
+- **Uploads:** the saved file extension is derived from the verified MIME type, not the client-supplied filename — this stops someone disguising a non-image/video file as one by mismatching Content-Type and filename. `POST /api/posts` also re-validates the media array server-side (image/video mix, count, and that each URL points at a file that was actually uploaded), not just in the UI.
 - **Uploaded media** is deleted from disk when a post is deleted or the user cancels posting.
-- **Multer** is pinned to `^2.2.0` (patches CVE-2025-7338 present in all 1.x releases).
-- **Upload rules:** max 4 images (≤3MB each) OR exactly 1 video (≤40MB, ≤30s) per post. Super Admin has no limits.
-- Run `npm audit` in both root and `client/` periodically.
+- **Rate limiting** (`express-rate-limit`) applies to every write endpoint, with a stricter limit on `/api/upload`.
+- **CORS** is restricted to the origin(s) in `CORS_ORIGIN` rather than open to any site.
+- **`helmet`** is applied for standard security headers.
+- **Multer** is pinned to `^2.2.0` (patches several DoS CVEs present in earlier releases, including CVE-2025-7338).
+- **Upload rules:** max 4 images (≤3MB each) OR exactly 1 video (≤40MB, ≤45s) per post. Super Admin has no limits.
+- Run `npm audit` in both root and `client/` periodically, and keep an eye on `@clerk/backend`/`@clerk/clerk-react` specifically — Clerk ships auth-relevant advisories fairly often.
 
 ---
 
 ## 🖊️ Adding New Articles
 
-Articles are static JS files in `client/src/data/`. To add a PUBG article:
+Articles are still plain JS files in `client/src/data/` — that part hasn't changed, and it's still where you add content. What changed: the app no longer bundles these files directly into the browser's JS (that stopped scaling once there were dozens of articles). Instead they're synced into MongoDB and served through a small paginated API (`GET /api/content`), which is what `Home`, `PubgArticles`, `GamingPhones`, `GamingLaptops`, `UpcomingGames`, and `Article` actually fetch from.
+
+To add a PUBG article:
 
 1. Open `client/src/data/articles.js`
 2. Add a new object to the `articles` array:
 
 ```js
 {
-  slug: 'my-new-article',           // URL slug — must be unique
+  slug: 'my-new-article',           // URL slug — must be unique across ALL of
+                                     // articles.js/phones.js/laptops.js/events.js
   title: 'Article Title',
   category: 'pubg',                 // pubg | phone | laptop | event
   thumbUrl: 'https://...',          // hero image URL (shown on card + article page)
@@ -183,7 +198,7 @@ Articles are static JS files in `client/src/data/`. To add a PUBG article:
   publishedAt: '2026-07-15',        // ISO date — newest = shown first + "Latest" button
   readTime: 5,
   featured: true,                   // true = shown in "TOP" slots on home + category pages
-  excerpt: 'Short description shown on cards.',
+  excerpt: 'Short description shown on cards, and used as the page meta description.',
   content: [
     { type: 'paragraph', text: '...' },
     { type: 'heading', level: 2, text: '...' },
@@ -194,6 +209,14 @@ Articles are static JS files in `client/src/data/`. To add a PUBG article:
 }
 ```
 
+3. **Run the sync** so MongoDB (and therefore the live site) actually picks it up:
+
+```bash
+npm run sync-content
+```
+
+This upserts everything in the four data files into the `content` collection by `slug`, and removes any document whose slug is no longer in the source files — so deleting an article from the JS file and re-running the sync removes it from the site too. Safe to re-run any time; do it after every edit to a data file, and as a step before/at each deploy.
+
 The "Latest PUBG" button on the hero automatically points to whichever article has the most recent `publishedAt` date — no manual update needed.
 
 ---
@@ -201,9 +224,12 @@ The "Latest PUBG" button on the hero automatically points to whichever article h
 ## 🏗️ Production Build & Deploy
 
 ```bash
-npm run build      # builds client/dist/
-npm start          # serves React + API from one Express process
+npm run sync-content   # push client/src/data/*.js into MongoDB
+npm run build          # builds client/dist/
+npm start               # serves React + API from one Express process
 ```
+
+Set `CORS_ORIGIN` and `SITE_URL` to your real deployed domain before going live — see [Environment files](#-quick-setup) above. `SITE_URL` is used to build absolute links in `/sitemap.xml` and `/robots.txt`, both served live by the Express app.
 
 Works well on Railway, Render (Web Service), or any VPS with nginx + PM2.
 

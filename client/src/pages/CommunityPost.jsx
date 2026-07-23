@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAuth, SignInButton } from '@clerk/clerk-react'
 import { ArrowLeft, ThumbsUp, Eye, MessageSquare, Pin, Trash2, Send, CornerDownRight, X, ZoomIn, Play } from 'lucide-react'
@@ -378,6 +378,10 @@ export default function CommunityPost() {
 
   const [post, setPost]         = useState(null)
   const [comments, setComments] = useState([])
+  const [commentsTotal, setCommentsTotal] = useState(0)
+  const [commentsPage, setCommentsPage]   = useState(1)
+  const [commentsPages, setCommentsPages] = useState(1)
+  const [loadingMore, setLoadingMore]     = useState(false)
   const [loading, setLoading]   = useState(true)
   const [liked, setLiked]       = useState(false)
   const [likeCount, setLikeCount] = useState(0)
@@ -400,13 +404,38 @@ export default function CommunityPost() {
         if (data) {
           setPost(data)
           setLiked(data.likedByMe || false)
-          setLikeCount(data.likes?.length || 0)
+          setLikeCount(data.likeCount || 0)
           setComments(data.comments || [])
+          setCommentsTotal(data.commentsTotal || 0)
+          setCommentsPages(data.commentsPages || 1)
+          setCommentsPage(1)
+
+          // Count a view once per browser per post, not on every fetch —
+          // otherwise refreshing the page inflates it.
+          const key = `viewed:${id}`
+          if (!localStorage.getItem(key)) {
+            localStorage.setItem(key, '1')
+            fetch(`/api/posts/${id}/view`, { method: 'POST' }).catch(() => {})
+          }
         }
       })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [id])
+
+  const loadMoreComments = async () => {
+    if (loadingMore || commentsPage >= commentsPages) return
+    setLoadingMore(true)
+    try {
+      const nextPage = commentsPage + 1
+      const res = await fetch(`/api/posts/${id}/comments?page=${nextPage}`)
+      const data = await res.json()
+      setComments(prev => [...prev, ...(data.comments || [])])
+      setCommentsPage(nextPage)
+      setCommentsPages(data.pages || commentsPages)
+    } catch {}
+    finally { setLoadingMore(false) }
+  }
 
   const toggleLike = async () => {
     if (!isSignedIn) return
@@ -431,6 +460,7 @@ export default function CommunityPost() {
       })
       const comment = await res.json()
       setComments(prev => [...prev, comment])
+      setCommentsTotal(prev => prev + 1)
       setNewComment('')
       setReplyTo(null)
     } catch {}
@@ -455,6 +485,7 @@ export default function CommunityPost() {
     const token = await getToken()
     await fetch(`/api/comments/${cId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
     setComments(prev => prev.filter(c => c._id !== cId))
+    setCommentsTotal(prev => Math.max(prev - 1, 0))
   }
 
   const focusReply = (authorName, cId) => {
@@ -473,8 +504,21 @@ export default function CommunityPost() {
   )
 
   const cat = CAT_STYLES[post.category] || CAT_STYLES.general
-  const topComments = comments.filter(c => !c.parentId)
-  const getReplies  = (cId) => comments.filter(c => c.parentId === cId)
+
+  // Single pass over comments instead of re-filtering the full array once
+  // per top-level comment (that was O(n²) and recomputed every render).
+  const { topComments, repliesByParent } = useMemo(() => {
+    const top = []
+    const byParent = new Map()
+    for (const c of comments) {
+      if (!c.parentId) top.push(c)
+      else {
+        if (!byParent.has(c.parentId)) byParent.set(c.parentId, [])
+        byParent.get(c.parentId).push(c)
+      }
+    }
+    return { topComments: top, repliesByParent: byParent }
+  }, [comments])
 
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-10">
@@ -527,7 +571,7 @@ export default function CommunityPost() {
               </button>
               <span className="social-action-pill">
                 <MessageSquare size={14} style={{ color: 'var(--gold)' }} />
-                {comments.length} Comments
+                {commentsTotal} Comments
               </span>
               <span className="social-action-pill">
                 <Eye size={14} /> {post.views || 0} Views
@@ -544,7 +588,7 @@ export default function CommunityPost() {
                   <span>Likes</span>
                 </div>
                 <div className="sidebar-metric-item">
-                  <strong>{comments.length}</strong>
+                  <strong>{commentsTotal}</strong>
                   <span>Comments</span>
                 </div>
                 <div className="sidebar-metric-item">
@@ -580,7 +624,7 @@ export default function CommunityPost() {
         <h2 className="font-barlow font-700 uppercase tracking-wider flex items-center gap-2 mb-5"
           style={{ fontSize: '20px', color: 'var(--text)' }}>
           <MessageSquare size={18} style={{ color: 'var(--orange)' }} />
-          Comments ({comments.length})
+          Comments ({commentsTotal})
         </h2>
 
         {replyTo && (
@@ -669,7 +713,7 @@ export default function CommunityPost() {
                 </div>
               </div>
 
-              {getReplies(c._id).map(r => (
+              {(repliesByParent.get(c._id) || []).map(r => (
                 <div key={r._id} className="flex items-start gap-3 mt-3 pl-10 reply-card">
                   <Avatar name={r.authorName} size={28} />
                   <div className="flex-1">
@@ -686,6 +730,14 @@ export default function CommunityPost() {
             </div>
           ))}
         </div>
+
+        {commentsPage < commentsPages && (
+          <div className="flex justify-center mt-6">
+            <button onClick={loadMoreComments} disabled={loadingMore} className="btn btn-ghost btn-sm">
+              {loadingMore ? 'Loading…' : `Load more comments (${commentsTotal - topComments.length} remaining)`}
+            </button>
+          </div>
+        )}
       </section>
 
       {showBack && (

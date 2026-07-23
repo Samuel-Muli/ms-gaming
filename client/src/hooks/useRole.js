@@ -1,5 +1,11 @@
 import { useUser } from '@clerk/clerk-react'
 
+// Mirrors the ROLES config in server.js — the client and server can't
+// share a module across this repo's boundary, so if you ever change the
+// role hierarchy, update both places.
+const MOD_PLUS   = ['moderator', 'admin', 'superadmin']
+const ADMIN_PLUS = ['admin', 'superadmin']
+
 export function useRole() {
   const { user, isLoaded, isSignedIn } = useUser()
   const role = user?.publicMetadata?.role || 'user'
@@ -9,10 +15,10 @@ export function useRole() {
     isLoaded,
     isSignedIn: !!isSignedIn,
     isSuperAdmin:    role === 'superadmin',
-    isAdmin:         ['admin', 'superadmin'].includes(role),
-    isModerator:     ['moderator', 'admin', 'superadmin'].includes(role),
-    canManageContent: ['moderator', 'admin', 'superadmin'].includes(role),
-    canManageUsers:  ['admin', 'superadmin'].includes(role),
+    isAdmin:         ADMIN_PLUS.includes(role),
+    isModerator:     MOD_PLUS.includes(role),
+    canManageContent: MOD_PLUS.includes(role),
+    canManageUsers:  ADMIN_PLUS.includes(role),
     canGrantAdmin:   role === 'superadmin',
   }
 }

@@ -1,12 +1,9 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { Flame } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
-import { articles } from '../data/articles'
-
-// Sort by date descending — most recent first
-const sorted = [...articles].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
-const mostRecent = sorted[0]
+import { useContentList } from '../lib/content'
 
 // Filter definitions — each maps to tag keywords
 const FILTERS = [
@@ -33,7 +30,8 @@ export default function PubgArticles() {
   const [searchParams, setSearchParams] = useSearchParams()
   const activeFilter = searchParams.get('filter') || 'all'
 
-  const filtered = useMemo(() => filterArticles(sorted, activeFilter), [activeFilter])
+  const { items: sorted } = useContentList({ category: 'pubg', limit: 200 })
+  const filtered = useMemo(() => filterArticles(sorted, activeFilter), [sorted, activeFilter])
 
   // Featured hero: most recent among filtered (or just most recent overall)
   const hero = filtered.find(a => a.featured) || filtered[0]
@@ -45,6 +43,11 @@ export default function PubgArticles() {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
+      <Helmet>
+        <title>PUBG Articles — Season Updates &amp; Strategy | M S Gaming</title>
+        <meta name="description" content="Season updates, weapon meta, strategy guides, and esports coverage for PUBG Battlegrounds and PUBG Mobile, written by 【M。S】." />
+      </Helmet>
+
       {/* Header */}
       <div className="mb-8 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3 mb-3">
@@ -100,7 +103,7 @@ export default function PubgArticles() {
       {grid.length > 0 && (
         <>
           <div className="section-label mb-4">
-            {activeFilter === 'all' ? `All Articles (${articles.length})` : `More in this category`}
+            {activeFilter === 'all' ? `All Articles (${sorted.length})` : `More in this category`}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {grid.map((a, i) => (

@@ -30,7 +30,7 @@ export default function PostCard({ post }) {
   const excerpt = caption ? `${caption.substring(0, 140)}${caption.length > 140 ? '…' : ''}` : ''
 
   const [liked, setLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(post.likes?.length || 0)
+  const [likeCount, setLikeCount] = useState(post.likeCount || 0)
   const [saving, setSaving] = useState(false)
 
   const toggleLike = async () => {

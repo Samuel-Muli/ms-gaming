@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { Calendar, MapPin, Trophy, Clock } from 'lucide-react'
-import { events, STATUS_COLORS } from '../data/events'
+import { STATUS_COLORS } from '../data/events'
+import { useContentList } from '../lib/content'
 import ArticleCard from '../components/ArticleCard'
 
 function EventCard({ event }) {
@@ -57,12 +59,17 @@ function EventCard({ event }) {
 }
 
 export default function UpcomingGames() {
+  const { items: events } = useContentList({ category: 'event', limit: 200 })
   const ongoing  = events.filter(e => e.status === 'ongoing')
   const upcoming = events.filter(e => e.status === 'upcoming')
   const past     = events.filter(e => e.status === 'past')
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
+      <Helmet>
+        <title>Upcoming Games &amp; Events | M S Gaming</title>
+        <meta name="description" content="PUBG tournaments, season drops, gaming expos, and hardware launches — all in one place." />
+      </Helmet>
 
       {/* Header */}
       <div className="mb-10 pb-6 border-b border-g-border">

@@ -1,7 +1,8 @@
 import { Monitor, Cpu, Laptop } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import ArticleCard from '../components/ArticleCard'
-import { laptopArticles } from '../data/laptops'
+import { useContentList } from '../lib/content'
 
 const TABS = [
   { id: 'laptops',   label: '💻 Laptops'     },
@@ -10,11 +11,17 @@ const TABS = [
 ]
 
 export default function GamingLaptops() {
+  const { items: laptopArticles } = useContentList({ category: 'laptop', limit: 200 })
   const featured = laptopArticles.find(a => a.featured)
   const rest = laptopArticles.filter(a => !a.featured)
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
+      <Helmet>
+        <title>Laptops &amp; Consoles — Gaming Hardware Reviews | M S Gaming</title>
+        <meta name="description" content="Reviews and buying guides for gaming laptops, PS5, Xbox, Nintendo, and custom PC builds for PUBG and gaming." />
+      </Helmet>
+
       {/* Header */}
       <div className="mb-10 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3 mb-3">

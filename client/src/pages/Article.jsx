@@ -1,22 +1,12 @@
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useAuth, SignInButton } from '@clerk/clerk-react'
+import { Helmet } from 'react-helmet-async'
 import { Clock, Tag, MessageSquare, Send, Trash2, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { articles, getArticleBySlug } from '../data/articles'
-import { phoneArticles, getPhoneArticleBySlug } from '../data/phones'
-import { laptopArticles, getLaptopArticleBySlug } from '../data/laptops'
-import { events, getEventBySlug, STATUS_COLORS } from '../data/events'
+import { STATUS_COLORS } from '../data/events'
+import { useContentBySlug } from '../lib/content'
 import { useRole } from '../hooks/useRole'
-
-function getArticle(category, slug) {
-  if (category === 'pubg')   return getArticleBySlug(slug)
-  if (category === 'phone')  return getPhoneArticleBySlug(slug)
-  if (category === 'laptop') return getLaptopArticleBySlug(slug)
-  if (category === 'event')  return getEventBySlug(slug)
-  // Search all
-  return getArticleBySlug(slug) || getPhoneArticleBySlug(slug) || getLaptopArticleBySlug(slug) || getEventBySlug(slug)
-}
 
 function getBackPath(category) {
   if (category === 'phone')  return { path: '/gaming-phones', label: 'Gaming Phones' }
@@ -54,7 +44,7 @@ function timeAgo(dateStr) {
 
 export default function Article({ category }) {
   const { slug } = useParams()
-  const article = getArticle(category, slug)
+  const { item: article, loading } = useContentBySlug(slug)
   const back = getBackPath(category)
 
   const { getToken, isSignedIn } = useAuth()
@@ -105,9 +95,18 @@ export default function Article({ category }) {
     } catch {}
   }
 
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-64 gap-4">
+        <p className="font-orbitron text-g-muted text-xl">Loading…</p>
+      </div>
+    )
+  }
+
   if (!article) {
     return (
       <div className="flex flex-col items-center justify-center min-h-64 gap-4">
+        <Helmet><title>Article Not Found | M S Gaming</title></Helmet>
         <p className="font-orbitron text-g-muted text-xl">Article not found</p>
         <Link to={back.path} className="btn btn-ghost">← Back to {back.label}</Link>
       </div>
@@ -118,6 +117,17 @@ export default function Article({ category }) {
 
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-10">
+      <Helmet>
+        <title>{article.title} | M S Gaming</title>
+        <meta name="description" content={article.excerpt} />
+        <meta property="og:title" content={article.title} />
+        <meta property="og:description" content={article.excerpt} />
+        <meta property="og:type" content="article" />
+        {article.thumbUrl && <meta property="og:image" content={article.thumbUrl} />}
+        <meta name="twitter:card" content={article.thumbUrl ? 'summary_large_image' : 'summary'} />
+        <meta name="twitter:title" content={article.title} />
+        <meta name="twitter:description" content={article.excerpt} />
+      </Helmet>
 
       {/* Back */}
       <Link

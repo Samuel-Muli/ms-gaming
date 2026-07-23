@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { Smartphone } from 'lucide-react'
 import ArticleCard from '../components/ArticleCard'
-import { phoneArticles } from '../data/phones'
+import { useContentList } from '../lib/content'
 
 const FILTERS = [
   { id: 'all',      label: 'All Phones' },
@@ -27,7 +28,8 @@ export default function GamingPhones() {
   const [searchParams, setSearchParams] = useSearchParams()
   const activeFilter = searchParams.get('filter') || 'all'
 
-  const filtered = useMemo(() => filterPhones(phoneArticles, activeFilter), [activeFilter])
+  const { items: phoneArticles } = useContentList({ category: 'phone', limit: 200 })
+  const filtered = useMemo(() => filterPhones(phoneArticles, activeFilter), [phoneArticles, activeFilter])
 
   // Show one hero (most recent featured), everything else in grid
   const hero = filtered.find(a => a.featured) || filtered[0]
@@ -39,6 +41,11 @@ export default function GamingPhones() {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-10">
+      <Helmet>
+        <title>Gaming Phones — Reviews &amp; Buying Guides | M S Gaming</title>
+        <meta name="description" content="Reviews, rankings, and buying guides for the best phones to play PUBG Mobile, from flagship to budget." />
+      </Helmet>
+
       {/* Header */}
       <div className="mb-8 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-3 mb-3">

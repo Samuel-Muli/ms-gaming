@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
-import { articles } from '../data/articles'
-
-// Resolve most recent article at module load time
-const latestArticle = [...articles].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))[0]
+import { useContentList } from '../lib/content'
 import { Crosshair, ChevronRight, Users, BookOpen, Gamepad2 } from 'lucide-react'
+
+const FALLBACK_SLUG = 'pubg-mobile-naruto-gilt-set-x-suit-prize-path-guide'
 
 const STATS = [
   { icon: Gamepad2,  label: 'PUBG Focus',  value: '#1',   color: 'var(--orange)' },
@@ -12,6 +11,9 @@ const STATS = [
 ]
 
 export default function HeroSection() {
+  const { items } = useContentList({ category: 'pubg', limit: 1 })
+  const latestSlug = items[0]?.slug || FALLBACK_SLUG
+
   return (
     <section
       className="relative overflow-hidden scanlines hero-panel"
@@ -86,7 +88,7 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <div className="flex flex-wrap gap-3 justify-center mb-16 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <Link to={`/articles/${latestArticle?.slug || "pubg-mobile-naruto-gilt-set-x-suit-prize-path-guide"}`} className="btn btn-primary text-base px-7 py-3">
+          <Link to={`/articles/${latestSlug}`} className="btn btn-primary text-base px-7 py-3">
             Latest PUBG <ChevronRight size={16} />
           </Link>
           <Link to="/community" className="btn btn-ghost text-base px-7 py-3">

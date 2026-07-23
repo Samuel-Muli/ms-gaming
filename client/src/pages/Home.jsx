@@ -4,10 +4,8 @@ import { ChevronRight, Flame, Smartphone, Monitor, Calendar, Users, Gamepad2, Ch
 import HeroSection from '../components/HeroSection'
 import ArticleCard from '../components/ArticleCard'
 import PlayerCard from '../components/PlayerCard'
-import { articles } from '../data/articles'
-import { phoneArticles } from '../data/phones'
-import { laptopArticles } from '../data/laptops'
-import { events, STATUS_COLORS } from '../data/events'
+import { useContentList } from '../lib/content'
+import { STATUS_COLORS } from '../data/events'
 
 /* ── Utility: pick 4 most-interacted + 4 least (by featured flag as proxy) ── */
 function pick8(arts) {
@@ -148,6 +146,11 @@ function ArticleGroup({ icon: Icon, label, color, allArticles, categoryLink, vie
 
 /* ── Home ── */
 export default function Home() {
+  const { items: articles }      = useContentList({ category: 'pubg',  limit: 100 })
+  const { items: phoneArticles } = useContentList({ category: 'phone', limit: 100 })
+  const { items: laptopArticles } = useContentList({ category: 'laptop', limit: 100 })
+  const { items: events }        = useContentList({ category: 'event', limit: 20 })
+
   return (
     <div>
       <HeroSection />
