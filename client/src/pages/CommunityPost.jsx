@@ -398,7 +398,7 @@ export default function CommunityPost() {
   }, [])
 
   useEffect(() => {
-    fetch(`/api/posts/${id}`)
+    fetch(`/api/posts/${String(id)}`)
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data) {
@@ -415,7 +415,7 @@ export default function CommunityPost() {
           const key = `viewed:${id}`
           if (!localStorage.getItem(key)) {
             localStorage.setItem(key, '1')
-            fetch(`/api/posts/${id}/view`, { method: 'POST' }).catch(() => {})
+            fetch(`/api/posts/${String(id)}/view`, { method: 'POST' }).catch(() => {})
           }
         }
       })
@@ -428,7 +428,7 @@ export default function CommunityPost() {
     setLoadingMore(true)
     try {
       const nextPage = commentsPage + 1
-      const res = await fetch(`/api/posts/${id}/comments?page=${nextPage}`)
+      const res = await fetch(`/api/posts/${String(id)}/comments?page=${nextPage}`)
       const data = await res.json()
       setComments(prev => [...prev, ...(data.comments || [])])
       setCommentsPage(nextPage)
@@ -440,7 +440,7 @@ export default function CommunityPost() {
   const toggleLike = async () => {
     if (!isSignedIn) return
     const token = await getToken()
-    const res = await fetch(`/api/posts/${id}/like`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+    const res = await fetch(`/api/posts/${String(id)}/like`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
     const data = await res.json()
     setLiked(data.liked)
     setLikeCount(data.likeCount)
@@ -453,7 +453,7 @@ export default function CommunityPost() {
       const token = await getToken()
       const body = { content: newComment.trim() }
       if (replyTo) body.parentId = replyTo.id
-      const res = await fetch(`/api/posts/${id}/comments`, {
+      const res = await fetch(`/api/posts/${String(id)}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(body),
@@ -470,13 +470,13 @@ export default function CommunityPost() {
   const deletePost = async () => {
     if (!confirm('Permanently delete this post?')) return
     const token = await getToken()
-    await fetch(`/api/posts/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
+    await fetch(`/api/posts/${String(id)}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
     navigate('/community')
   }
 
   const pinPost = async () => {
     const token = await getToken()
-    const res = await fetch(`/api/posts/${id}/pin`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+    const res = await fetch(`/api/posts/${String(id)}/pin`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
     const data = await res.json()
     setPost(p => ({ ...p, isPinned: data.isPinned }))
   }

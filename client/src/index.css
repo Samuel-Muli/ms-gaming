@@ -1440,3 +1440,276 @@ select.input { cursor: pointer; }
 
 /* ── Drawer animation already defined, drawerSlideIn in Navbar ── */
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   POST CARD — new layout system (pc- prefix)
+   Mobile:   Name → Title → Media → Caption → Footer  (vertical stack)
+   Desktop:  Left col (Name + Title + Media + Footer)  |  Right col (Caption)
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Outer card ── */
+.pc-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "author"
+    "title"
+    "media"
+    "caption"
+    "footer";
+  gap: 0;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.pc-card:hover {
+  transform: translateY(-3px);
+}
+.pc-card:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* ── Author row ── */
+.pc-author {
+  grid-area: author;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 0;
+  flex-wrap: wrap;
+}
+.pc-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  color: #0a0a0f;
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.pc-author-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pc-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pc-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+.pc-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+/* ── Title ── */
+.pc-title {
+  grid-area: title;
+  padding: 8px 16px 0;
+}
+.pc-title h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  line-height: 1.3;
+  margin: 0;
+  transition: color 0.18s;
+}
+.pc-card:hover .pc-title h3 {
+  color: var(--orange);
+}
+
+/* ── Media ── */
+.pc-media {
+  grid-area: media;
+  position: relative;
+  overflow: hidden;
+  background: var(--s2);
+  max-height: 340px;
+  margin-top: 10px;
+}
+.pc-media-el {
+  width: 100%;
+  height: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.pc-card:hover .pc-media-el {
+  transform: scale(1.03);
+}
+.pc-media-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(10,10,15,0.75);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+/* ── Caption ── */
+.pc-caption {
+  grid-area: caption;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  padding: 10px 16px 0;
+  margin: 0;
+  /* Clamp to 4 lines on mobile */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Footer ── */
+.pc-footer {
+  grid-area: footer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 16px 14px;
+  flex-wrap: wrap;
+}
+.pc-stats {
+  display: flex;
+  gap: 10px;
+}
+.pc-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.pc-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.pc-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.pc-action-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: rgba(240,132,44,0.08);
+}
+.pc-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pc-action-liked {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: rgba(240,132,44,0.1);
+}
+.pc-action-delete {
+  color: var(--muted);
+}
+.pc-action-delete:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(232,58,58,0.08);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DESKTOP LAYOUT  ≥ 860px
+   Left col:  Author  |  Right col: Caption (spans all 4 rows)
+              Title   |
+              Media   |
+              Footer  |
+══════════════════════════════════════════════════════════════════ */
+@media (min-width: 860px) {
+  .pc-card {
+    grid-template-columns: minmax(0, 1.5fr) minmax(180px, 1fr);
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      "author  caption"
+      "title   caption"
+      "media   caption"
+      "footer  caption";
+    align-items: start;
+  }
+
+  /* Caption fills the full right column */
+  .pc-caption {
+    padding: 18px 20px 14px 14px;
+    border-left: 1px solid var(--border);
+    /* No line-clamp on desktop — show full text */
+    -webkit-line-clamp: unset;
+    display: block;
+    overflow: visible;
+    /* Vertically center if post has no media */
+    align-self: stretch;
+    font-size: 15px;
+  }
+
+  /* Remove top padding now the grid provides spacing */
+  .pc-author { padding: 16px 0 0 16px; }
+  .pc-title  { padding: 10px 0 0 16px; }
+  .pc-footer { padding: 12px 0 16px 16px; }
+
+  /* Media: no side margin, flush left in its column */
+  .pc-media {
+    margin-top: 12px;
+    /* Slightly shorter on desktop — let caption breathe */
+    max-height: 280px;
+  }
+
+  /* No-media variant: caption still fills right */
+  .pc-card:not(:has(.pc-media)) {
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "author  caption"
+      "title   caption"
+      "footer  caption";
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Posts with no caption (no text content): hide the empty area
+══════════════════════════════════════════════════════════════════ */
+.pc-caption:empty { display: none; }

@@ -245,6 +245,8 @@ export default function Community() {
   const catParam = searchParams.get('cat') || 'all'
 
   const [posts, setPosts]           = useState([])
+  // Remove a post from the feed (after deletion in PostCard)
+  const removePost = (postId) => setPosts(prev => prev.filter(p => String(p._id) !== String(postId)))
   const [loading, setLoading]       = useState(true)
   const [page, setPage]             = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -555,7 +557,7 @@ export default function Community() {
           {posts.map((post, i) => (
             <div key={post._id} className="animate-slide-up"
               style={{ animationDelay: `${Math.min(i, 10) * 0.03}s` }}>
-              <PostCard post={post} />
+              <PostCard post={post} onDelete={removePost} />
             </div>
           ))}
         </div>
