@@ -251,6 +251,7 @@ export default function Community() {
   const [page, setPage]             = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [showForm, setShowForm]     = useState(false)
+  const formRef = useRef(null)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [form, setForm]             = useState(EMPTY_FORM)
   const [media, setMedia]           = useState([])   // uploaded media
@@ -287,10 +288,7 @@ export default function Community() {
   }
 
   const submitPost = async () => {
-    if (!form.title.trim() || !form.content.trim()) {
-      setFormError('Title and content are required.')
-      return
-    }
+    // Title and content are optional — only media is sufficient
     setSubmitting(true)
     setFormError('')
     try {
@@ -353,7 +351,15 @@ export default function Community() {
         </div>
 
         {isSignedIn ? (
-          <button className="btn btn-primary shrink-0 hidden sm:inline-flex" onClick={() => setShowForm(o => !o)}>
+          <button className="btn btn-primary shrink-0 hidden sm:inline-flex" onClick={() => {
+          setShowForm(o => {
+            if (!o) {
+              // Scroll to form after React renders it
+              setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
+            }
+            return !o
+          })
+        }}>
             <Plus size={16} /> New Post
           </button>
         ) : (
@@ -365,7 +371,7 @@ export default function Community() {
 
       {/* ── New Post Form ── */}
       {showForm && (
-        <div className="social-post-card p-6 mb-8 animate-slide-up">
+        <div ref={formRef} className="social-post-card p-6 mb-8 animate-slide-up">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-barlow font-700 text-xl uppercase tracking-wide" style={{ color: 'var(--text)' }}>
               New Post

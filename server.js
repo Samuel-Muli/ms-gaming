@@ -292,7 +292,8 @@ app.get('/api/posts', async (req, res) => {
 // then fetches replies for just that page's parents rather than every
 // comment on the post.
 async function getPostCommentsPage(postId, page, limit) {
-  const parentFilter = { postId, parentId: null, isDeleted: { $ne: true } };
+  // Include soft-deleted comments so frontend can show "Deleted by X"
+  const parentFilter = { postId, parentId: null };
   const [topLevel, total] = await Promise.all([
     db.collection('comments').find(parentFilter)
       .sort({ createdAt: 1 }).skip((page - 1) * limit).limit(limit).toArray(),
@@ -301,7 +302,7 @@ async function getPostCommentsPage(postId, page, limit) {
   const topIds = topLevel.map(c => c._id.toString());
   const replies = topIds.length
     ? await db.collection('comments')
-        .find({ postId, parentId: { $in: topIds }, isDeleted: { $ne: true } })
+        .find({ postId, parentId: { $in: topIds } })
         .sort({ createdAt: 1 }).toArray()
     : [];
   return { comments: [...topLevel, ...replies], total, pages: Math.ceil(total / limit) };
@@ -325,8 +326,7 @@ app.get('/api/posts/:id', async (req, res) => {
 app.post('/api/posts', writeLimiter, requireAuth, async (req, res) => {
   try {
     const { title, content, category = 'general', tags = [] } = req.body;
-    if (!title?.trim() || !content?.trim())
-      return res.status(400).json({ error: 'Title and content required' });
+    // Title and content are optional — a post can be media-only
 
     const mediaCheck = validateMedia(req.body.media);
     if (!mediaCheck.ok) return res.status(400).json({ error: mediaCheck.error });
@@ -363,8 +363,7 @@ app.put('/api/posts/:id', writeLimiter, requireAuth, async (req, res) => {
     const { title, content, category, tags } = req.body;
     // Same non-empty validation as creation — previously PUT accepted a
     // blank title/content since only POST checked for it.
-    if (!title?.trim() || !content?.trim())
-      return res.status(400).json({ error: 'Title and content required' });
+    // Title and content are optional — a post can be media-only
 
     await db.collection('posts').updateOne(
       { _id: new ObjectId(req.params.id) },
@@ -464,7 +463,10 @@ app.delete('/api/comments/:id', writeLimiter, requireAuth, async (req, res) => {
     if (!c) return res.status(404).json({ error: 'Not found' });
     const canDelete = c.authorId === req.userId || isModPlus(req.userRole);
     if (!canDelete) return res.status(403).json({ error: 'Forbidden' });
-    await db.collection('comments').updateOne({ _id: new ObjectId(req.params.id) }, { $set: { isDeleted: true } });
+    await db.collection('comments').updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: { isDeleted: true, deletedByName: req.displayName, deletedAt: new Date() } }
+    );
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: 'Server error' }); }
 });
