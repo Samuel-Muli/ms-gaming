@@ -18,7 +18,7 @@ const SOCIALS = [
   { Icon: SvgIG, href: 'https://www.instagram.com/dulcet265',               label: 'Instagram', color: '#E1306C' },
   { Icon: SvgLI, href: 'https://www.linkedin.com/in/muli-samuel-442259344', label: 'LinkedIn',  color: '#0A66C2' },
   { Icon: SvgGH, href: 'https://github.com/Samuel-Muli',                    label: 'GitHub',    color: '#E8E8F0' },
-  { Icon: SvgTK, href: 'https://www.tiktok.com/@muli.samuel',               label: 'TikTok',    color: '#EE1D52' },
+  { Icon: SvgTK, href: 'https://www.tiktok.com/@muli_samuel',               label: 'TikTok',    color: '#EE1D52' },
 ]
 
 const SESSION_KEY = 'msg-social-popup-dismissed'
